@@ -1,0 +1,74 @@
+@charset "UTF-8";
+
+body {
+	background: #FFFCFE
+}
+a{text-decoration: none;}
+
+
+
+#header {
+	position: fixed;
+	width: 1440px;
+	height: 215px;
+	height: 248px;
+	left: calc(50% - 1440px/ 2);
+	margin-bottom: 50px;
+	top: 0px;
+	background: #FFFCFE;
+	z-index: 9999;
+}
+
+#contents {
+	position: relative;
+	width: 1398px;
+	margin-top:260px;
+}
+
+#footer {
+	position: absolute;
+	width: 1440px;
+	height: 78px;
+	left: 0px;
+	top: 1740px;
+}
+
+#logo {
+	width: 320px;
+	height: 228px;
+}
+
+#login {
+	position: absolute;
+	width: 88.15px;
+	height: 47px;
+	left: 1221px;
+	top: 43px;
+}
+
+.menu ul {
+	position: absolute;
+	width: 837px;
+	height: 51px;
+	left: 400px;
+	top: 134px;
+	list-style: none;
+}
+
+.menu li {
+	float: left;
+	margin-left: 60px;
+	font-size: 1.3em;
+	font-weight: bold;
+	margin-bottom: 1%;
+	cursor: pointer;
+}
+
+hr {
+	clear: both;
+	float: right;
+	width: 940px;
+	margin-left: 10%;
+	border: 1px solid rgba(39, 47, 89, 0.29);
+	box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+}
