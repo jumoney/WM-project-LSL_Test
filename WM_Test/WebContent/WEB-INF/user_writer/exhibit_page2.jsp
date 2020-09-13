@@ -19,7 +19,6 @@
 	border: 1px solid black;
 }
 
-
 /*----------------------- 추가 사항 ----------------- */
 #my_exihibit {
 	width: 100%;
@@ -170,7 +169,7 @@
 </style>
 
 <body>
-<jsp:include page="../../header.jsp"></jsp:include>
+	<jsp:include page="../../header.jsp"></jsp:include>
 	<div id="container">
 		<div id="contents">
 			<div id="my_exihibit">
@@ -207,75 +206,77 @@
 		</div>
 	</div>
 	<script>	
-        /*작품 정보 객체 생성*/
-        function exhibit_work_info(title) {
-            this.title = title;
-        }
+	/*작품 정보 생성자함수(자바의 클래스 개념) 선언*/
+	/*출품신청 목록*/
+    function ExhibitWorkInfo(title) {
+        this.title = title;
+    }
+	/*전시 목록*/
+    function ExhibitionWorkInfo(title, like_cnt, cmt_cnt) {
+        this.title = title;
+        this.like_cnt = like_cnt;
+        this.cmt_cnt = cmt_cnt;
+    }
 
-        function exhibition_work_info(title, like_cnt, cmt_cnt) {
-            this.title = title;
-            this.like_cnt = like_cnt;
-            this.cmt_cnt = cmt_cnt;
-        }
+    /*작품 정보 배열 생성(출품 목록, 전시 목록)*/
+    var exhibitWorkInfoArr = [];
+    var exhibitionWorkInfoArr = [];
 
-        /*작품 정보 배열 생성(출품 목록, 전시 목록)*/
-        var exhibit_work_info_arr = [];
-        var exhibition_work_info_arr = [];
+    /*작품 정보 배열에 작품 정보 삽입(나중에 jsp에서 받아올 정보)*/
+    <c:forEach items="${workList}" var="item">
+		exhibitWorkInfoArr.push(new ExhibitWorkInfo('${item.title}'));
+	</c:forEach>
 
-        /*작품 정보 배열에 작품 정보 삽입(나중에 jsp에서 받아올 정보)*/
-        <c:forEach items="${workList}" var="item">
-    		exhibit_work_info_arr.push(new exhibit_work_info('${item.title}'));
-		</c:forEach>
-    
-		/*전시목록*/
-        exhibition_work_info_arr.push(new exhibition_work_info("목련", 100, 100));
-        exhibition_work_info_arr.push(new exhibition_work_info("모나미", 100, 100));
+	/*전시목록*/
+    exhibitionWorkInfoArr.push(new ExhibitionWorkInfo("목련", 100, 100));
+    exhibitionWorkInfoArr.push(new ExhibitionWorkInfo("모나미", 100, 100));
 
-        /*작품정보를 받아와 콘텐츠영역안에 테이블을 생성하여 보여주는 함수*/
-        // 출품한 작품목록
-        function display_exhibit_work_info(param_arr) {
-            var exhibition_list = document.getElementById('exhibit_list');
-            exhibit_list.innerHTML = "";
-            for (var i = 0; i < param_arr.length; i++) {
+    /*작품정보를 받아와 콘텐츠영역안에 테이블을 생성하여 보여주는 함수*/
+     // 출품한 작품목록
+        function displayExhibitWorkInfo(paramArr) {
+            var exhibitList = document.getElementById('exhibit_list');
+            exhibitList.innerHTML = "";
+            for (var i = 0; i < paramArr.length; i++) {
                 var li = document.createElement('li');
-                li.innerHTML = `<span style="cursor: default">\${i+1}.\${param_arr[i].title}</span><a id="mod_exhibit" style="cursor: pointer" onclick="mod_exhibit()">수정</a><a
-                                            id="del_exhibit" style="cursor: pointer" onclick="del_exhibit(\${i})">삭제</a>`;
-                exhibition_list.append(li);
+                li.innerHTML = `<span style="cursor: default">\${i+1}.\${paramArr[i].title}</span><a id="mod_exhibit" style="cursor: pointer" onclick="modExhibit()">수정</a>
+                <a id="del_exhibit" style="cursor: pointer" onclick="delExhibit(\${i})">삭제</a>`;
+                exhibitList.append(li);
             }
         }
         // 전시한 작품목록
-        function display_exhibition_work_info(param_arr) {
-            var exhibit_list = document.getElementById('exhibition_list');
-            exhibit_list.innerHTML = "";
-            for (var i = 0; i < param_arr.length; i++) {
+        function displayExhibitionWorkInfo(paramArr) {
+            var exhibitionList = document.getElementById('exhibition_list');
+            exhibitionList.innerHTML = "";
+            for (var i = 0; i < paramArr.length; i++) {
                 var li = document.createElement('li');
-                li.setAttribute('onclick', `move_page(\${i})`);
-                li.innerHTML = `<span>\${i+1}.\${param_arr[i].title}</span><div id="cnt_div"><img id="like_cnt_icon" src="/image/like_icon.png"><span id="like_cnt">\${param_arr[i].like_cnt}++</span>&nbsp&nbsp&nbsp&nbsp&nbsp<img id="cmt_cnt_icon" src="/image/cmt_icon.png"><span id="cmt_cnt">\${param_arr[i].cmt_cnt}++</span></div>`;
-                exhibit_list.append(li);
+                li.setAttribute('onclick', `movePage(\${i})`);
+                li.innerHTML = `<span>\${i+1}.\${paramArr[i].title}</span><div id="cnt_div"><img id="like_cnt_icon" src="/resource/user_writer/images/like_icon.png"><span id="like_cnt">\${paramArr[i].like_cnt}++</span>&nbsp&nbsp&nbsp&nbsp&nbsp<img id="cmt_cnt_icon" src="/resource/user_writer/images/cmt_icon.png"><span id="cmt_cnt">\${paramArr[i].cmt_cnt}++</span></div>`;
+                exhibitionList.append(li);
             }
         }
 
-        function del_exhibit(i){
-            if(confirm(`제목: \${exhibit_work_info_arr[i].title}\n삭제하시겠습니까?`)){
-                exhibit_work_info_arr.splice(i, 1);
-                alert('삭제 되었습니다.');
-                display_exhibit_work_info(exhibit_work_info_arr);
-            }
+	/*출품신청 작품 수정/삭제 하는 함수*/
+    function delExhibit(i){
+        if(confirm(`제목: \${exhibitWorkInfoArr[i].title}\n삭제하시겠습니까?`)){
+            exhibitWorkInfoArr.splice(i, 1);
+            alert('삭제 되었습니다.');
+            displayExhibitWorkInfo(exhibitWorkInfoArr);
         }
+    }
 
-        function mod_exhibit(){
-            if(confirm('수정 페이지로 이동하시겠습니까?')){
-                location.href = "/writer/exhibit_page1";
-            }
-           
+    function modExhibit(){
+        if(confirm('수정 페이지로 이동하시겠습니까?')){
+            location.href = "/writer/exhibit_page1";
         }
+       
+    }
 
-        function move_page(idx) {
-            alert('페이지 이동Index :' + idx);
-        }
+    function movePage(idx) {
+        alert('페이지 이동Index :' + idx);
+    }
 
-        display_exhibit_work_info(exhibit_work_info_arr);
-        display_exhibition_work_info(exhibition_work_info_arr);
+    displayExhibitWorkInfo(exhibitWorkInfoArr);
+    displayExhibitionWorkInfo(exhibitionWorkInfoArr);
     </script>
 </body>
 

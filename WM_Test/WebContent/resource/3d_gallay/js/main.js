@@ -41,18 +41,18 @@ var PLAYERCOLLISIONDISTANCE = 20;
 
 //1번 전시관
 var gallay1 = [
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],
+  [1, 1, 3, 1, 3, 1, 3, 1, 3, 1, 1, 1, ],
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, ],
   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, ],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, ],
-  [1, 0, 0, 3, 1, 3, 1, 3, 0, 0, 0, 1, ],
-  [1, 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, 1, ],
-  [1, 0, 1, 0, 2, 0, 2, 0, 6, 0, 0, 1, ],
-  [1, 0, 4, 0, 0, 0, 0, 1, 1, 0, 0, 1, ],
-  [1, 0, 1, 0, 2, 0, 2, 0, 6, 0, 0, 1, ],
-  [1, 0, 4, 0, 0, 0, 0, 1, 1, 0, 0, 1, ],
-  [1, 0, 1, 1, 0, 0, 0, 0, 6, 0, 0, 1, ],
-  [1, 0, 4, 0, 0, 0, 0, 1, 1, 0, 0, 1, ],
-  [1, 1, 1, 1, 5, 1, 5, 1, 1, 1, 1, 1, ]
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, ],
+  [1, 0, 3, 5, 1, 5, 1, 5, 1, 1, 0, 1, ],
+  [4, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, ],
+  [1, 0, 0, 6, 1, 0, 3, 3, 3, 3, 0, 1, ],
+  [4, 0, 0, 1, 1, 4, 0, 0, 0, 0, 0, 1, ],
+  [1, 0, 0, 6, 1, 4, 0, 0, 0, 0, 0, 1, ],
+  [4, 0, 0, 1, 1, 4, 0, 0, 0, 0, 0, 1, ],
+  [1, 0, 0, 1, 1, 1, 5, 5, 5, 5, 5, 1, ],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ]
 ];
 
 
@@ -108,18 +108,17 @@ function init() {
 
   // Set camera position and view details
   camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
-  
-  camera.position.y = 0; // Height the camera will be looking from
-  camera.position.x = 0;
-  camera.position.z = 0;
 
   // Add the camera to the controller, then add to the scene
   controls = new THREE.PointerLockControls(camera);
   //카메라의 위치를 조정한다.
   //카메라의 z축
-  controls.getObject().position.z = 300;
+  controls.getObject().position.z = 400;
   //카메라의 높이
   controls.getObject().position.y = 45;
+
+  controls.getObject().position.x = -400;
+  
   scene.add(controls.getObject());
 
   // Add the walls(cubes) of the maze
@@ -142,270 +141,330 @@ function init() {
 
 // Add lights to the scene
 function addLights() {
-  var lightOne = new THREE.DirectionalLight(0xffffff);
-  lightOne.position.set(1, 1, 1);
-  scene.add(lightOne);
-
-  var lightTwo = new THREE.DirectionalLight(0xffffff, .5);
-  lightTwo.position.set(1, -1, -1);
-  scene.add(lightTwo);
+  const color = 0xFFFFFF;
+  const intensity = 0.2;
+  const light = new THREE.AmbientLight(color, intensity);
+  scene.add(light);
 }
-
-
 
 //맵을 만드는데 사용될 벽을 만드는 함수
 function createMazeWalls(gallay_num) {
-    //텍스처 변수
-    var texture;
-    //벽을 만드는데 사용될 재료(텍스처를 담을 변수)
-    var wallMaterial;
+  //텍스처 변수
+  var texture;
+  //벽을 만드는데 사용될 재료(텍스처를 담을 변수)
+  var wallMaterial;
+  //액자 및 그림 배열 변수 선언(렌덤하게 돌리기 위해 배열로 생성한다.)
+  //정면(액자, 그림)
+  var frameGeoFrontArr = [];
+  var frameMaterialFrontArr = [];
+  var paintingGeoFrontArr = [];
+  var paintingMaterialFrontArr = [];
 
-    //1번 전시관 이라면
-    if(gallay_num == 1) {
-      var map = gallay1;
+  //옆면(액자, 그림)
+  var frameGeoSideArr = [];
+  var frameMaterialSideArr = [];
+  var paintingGeoSideArr = [];
+  var paintingMaterialSideArr = [];
 
-      // 일반벽
-      var wallGeo = new THREE.BoxBufferGeometry(UNITWIDTH, UNITHEIGHT, UNITWIDTH);
-     // 전시벽
-      var wallGeo2 = new THREE.BoxBufferGeometry(UNITWIDTH/2, UNITHEIGHT/2, UNITWIDTH/6);
-      //벽 텍스쳐1 추가
-      texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/wall_texture5.jpg');
-      wallMaterial = new THREE.MeshBasicMaterial({
-          map: texture,
-      });
-       //벽 텍스쳐2 추가
-       texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/wall_texture6.jpg');
-       wallMaterial2 = new THREE.MeshBasicMaterial({
-           map: texture,
-       });
-      //액자(정면)
-      var frameGeoFront = new THREE.BoxGeometry(UNITWIDTH/4+15, UNITHEIGHT/6, 2);
-      //액자(정면) 텍스처 추가
-      texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/photoFrame3.png');
-      var frameMaterialFront = new THREE.MeshBasicMaterial({
-          map: texture,
-      });
-  
-       //액자(옆면)
-       var frameGeoSide = new THREE.BoxGeometry(2, UNITHEIGHT/6, UNITWIDTH/4+15);
-       //엑자(옆면) 텍스쳐 추가
-       texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/photoFrame3.png');
-       var frameMaterialSide = new THREE.MeshBasicMaterial({
-           map: texture,
-       });
-  
-       //그림(정면)
-      var paintingGeoFront = new THREE.BoxGeometry(UNITWIDTH/4+5, UNITHEIGHT/6-8, 1);
-      //그림(정면) 텍스쳐 추가
-      texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/testImg1.png');
-      var paintingMaterialFront = new THREE.MeshBasicMaterial({
-          map: texture,
-      });
-  
-        //그림(옆면)
-        var paintingGeoSide = new THREE.BoxGeometry(1, UNITHEIGHT/6-8, UNITWIDTH/4+5);
-        //벽 텍스쳐 추가(**추가부분**)
-        texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/testImg2.jpeg');
-        var paintingMaterialSide = new THREE.MeshBasicMaterial({
-            map: texture,
-        });
-  
-        //액자2(정면)
-      var frameGeoFront2 = new THREE.BoxGeometry(UNITWIDTH/4+15, UNITHEIGHT/4, 2);
-      //엑자2(정면) 텍스쳐 추가
-      texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/photoFrame4.jpg');
-      var frameMaterialFront2 = new THREE.MeshBasicMaterial({
-          map: texture,
-      });
-  
-       //액자2(옆면)
-       var frameGeoSide2  = new THREE.BoxGeometry(2, UNITHEIGHT/4, UNITWIDTH/4+15);
-       //엑자2(옆면) 텍스쳐 추가
-       texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/photoFrame4.jpg');
-       var frameMaterialSide2 = new THREE.MeshBasicMaterial({
-           map: texture,
-       });
-  
-       //그림2(정면)
-       var paintingGeoFront2 = new THREE.BoxGeometry(UNITWIDTH/4+8, UNITHEIGHT/6+6, 1);
-      //그림2(정면) 텍스쳐 추가
-      texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/testImg3.jpg');
-      var paintingMaterialFront2 = new THREE.MeshBasicMaterial({
-          map: texture,
-      });
-  
-        //그림2(옆면)
-        var paintingGeoSide2 = new THREE.BoxGeometry(1, UNITHEIGHT/6+6, UNITWIDTH/4+8);
-        //그림2(옆면) 텍스쳐 추가
-        texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/testImg4.jpeg');
-        var paintingMaterialSide2 = new THREE.MeshBasicMaterial({
-            map:  texture,
-        });
-  
-       //텍스처를 반복해서 촘촘하게 출력되게 한다(중요)
-       wallMaterial.map.repeat.x=1;  //20번반복
-       wallMaterial.map.repeat.y=1;  //20번반복
-       wallMaterial.map.wrapS=THREE.RepeatWrapping;
-       wallMaterial.map.wrapT=THREE.RepeatWrapping;
-  
-      // Keep cubes within boundry walls
-          var widthOffset = UNITWIDTH / 2;
-      // Put the bottom of the cube at y = 0
-          var heightOffset = UNITHEIGHT / 2;
-          var heightOffset2 = UNITHEIGHT / 4;
-  
-      // See how wide the map is by seeing how long the first array is
+  //1번 전시관 이라면
+  if (gallay_num == 1) {
+    var map = gallay1;
+
+    // 일반벽
+    var wallGeo = new THREE.BoxBufferGeometry(UNITWIDTH, UNITHEIGHT, UNITWIDTH);
+
+    //벽 텍스쳐 추가
+    texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/wall_texture9.jpg');
+    wallMaterial = new THREE.MeshPhongMaterial({
+      map: texture,
+    });
+
+    //액자(정면)
+    var frameGeoFront = new THREE.BoxGeometry(UNITWIDTH / 4 + 15, UNITHEIGHT / 6, 2);
+    //배열에 삽입
+    frameGeoFrontArr[0] = frameGeoFront;
+    //액자(정면) 텍스처 추가
+    texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/photoFrame3.png');
+    var frameMaterialFront = new THREE.MeshPhongMaterial({
+      map: texture,
+    });
+    //배열에 삽입
+    frameMaterialFrontArr[0] = frameMaterialFront;
+
+    //액자(옆면)
+    var frameGeoSide = new THREE.BoxGeometry(2, UNITHEIGHT / 6, UNITWIDTH / 4 + 15);
+    //배열에 삽입
+    frameGeoSideArr[0] = frameGeoSide;
+    //엑자(옆면) 텍스쳐 추가
+    texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/photoFrame3.png');
+    var frameMaterialSide = new THREE.MeshPhongMaterial({
+      map: texture,
+    });
+    //배열에 삽입
+    frameMaterialSideArr[0] = frameMaterialSide;
+
+    //그림(정면)
+    var paintingGeoFront = new THREE.BoxGeometry(UNITWIDTH / 4 + 5, UNITHEIGHT / 6 - 8, 1);
+    //배열에 삽입
+    paintingGeoFrontArr[0] = paintingGeoFront;
+    //그림(정면) 텍스쳐 추가
+    texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/testImg1.png');
+    var paintingMaterialFront = new THREE.MeshPhongMaterial({
+      map: texture,
+    });
+    //배열에 삽입
+    paintingMaterialFrontArr[0] = paintingMaterialFront;
+
+    //그림(옆면)
+    var paintingGeoSide = new THREE.BoxGeometry(1, UNITHEIGHT / 6 - 8, UNITWIDTH / 4 + 5);
+    //배열에 삽입
+    paintingGeoSideArr[0] = paintingGeoSide;
+
+    //벽 텍스쳐 추가(**추가부분**)
+    texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/testImg2.jpeg');
+    var paintingMaterialSide = new THREE.MeshPhongMaterial({
+      map: texture,
+    });
+    //배열에 삽입
+    paintingMaterialSideArr[0] = paintingMaterialSide;
+
+    //액자2(정면)
+    var frameGeoFront2 = new THREE.BoxGeometry(UNITWIDTH / 4 + 15, UNITHEIGHT / 4, 2);
+    //배열에 삽입
+    frameGeoFrontArr[1] = frameGeoFront2;
+    //엑자2(정면) 텍스쳐 추가
+    texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/photoFrame4.jpg');
+    var frameMaterialFront2 = new THREE.MeshPhongMaterial({
+      map: texture,
+    });
+    //배열에 삽입
+    frameMaterialFrontArr[1] = frameMaterialFront2;
+
+    //액자2(옆면)
+    var frameGeoSide2 = new THREE.BoxGeometry(2, UNITHEIGHT / 4, UNITWIDTH / 4 + 15);
+    //배열에 삽입
+    frameGeoSideArr[1] = frameGeoSide2;
+    //엑자2(옆면) 텍스쳐 추가
+    texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/photoFrame4.jpg');
+    var frameMaterialSide2 = new THREE.MeshPhongMaterial({
+      map: texture,
+    });
+    //배열에 삽입
+    frameMaterialSideArr[1] = frameMaterialSide2;
+
+    //그림2(정면)
+    var paintingGeoFront2 = new THREE.BoxGeometry(UNITWIDTH / 4 + 8, UNITHEIGHT / 6 + 6, 1);
+    //배열에 삽입
+    paintingGeoFrontArr[1] = paintingGeoFront2;
+    //그림2(정면) 텍스쳐 추가
+    texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/testImg3.jpg');
+    var paintingMaterialFront2 = new THREE.MeshPhongMaterial({
+      map: texture,
+    });
+    //배열에 삽입
+    paintingMaterialFrontArr[1] = paintingMaterialFront2;
+
+    //그림2(옆면)
+    var paintingGeoSide2 = new THREE.BoxGeometry(1, UNITHEIGHT / 6 + 6, UNITWIDTH / 4 + 8);
+    //배열에 삽입
+    paintingGeoSideArr[1] = paintingGeoSide2;
+    //그림2(옆면) 텍스쳐 추가
+    texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/testImg4.jpeg');
+    var paintingMaterialSide2 = new THREE.MeshPhongMaterial({
+      map: texture,
+    });
+    //배열에 삽입
+    paintingMaterialSideArr[1] = paintingMaterialSide2;
+
+    //액자3(정면)
+    var frameGeoFront3 = new THREE.BoxGeometry(UNITWIDTH / 4 + 20, UNITHEIGHT / 4 + 15, 2);
+    //배열에 삽입
+    frameGeoFrontArr[2] = frameGeoFront3;
+    //엑자3(정면) 텍스쳐 추가
+    texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/photoFrame5.jpg');
+    var frameMaterialFront3 = new THREE.MeshPhongMaterial({
+      map: texture,
+    });
+    //배열에 삽입
+    frameMaterialFrontArr[2] = frameMaterialFront3;
+
+    //액자3(옆면)
+    var frameGeoSide3 = new THREE.BoxGeometry(2, UNITHEIGHT / 4 + 15, UNITWIDTH / 4 + 20);
+    //배열에 삽입
+    frameGeoSideArr[2] = frameGeoSide3;
+    //엑자3(옆면) 텍스쳐 추가
+    texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/photoFrame5.jpg');
+    var frameMaterialSide3 = new THREE.MeshPhongMaterial({
+      map: texture,
+    });
+    //배열에 삽입
+    frameMaterialSideArr[2] = frameMaterialSide3;
+
+
+    //그림3(정면)
+    var paintingGeoFront3 = new THREE.BoxGeometry(UNITWIDTH / 4 + 10, UNITHEIGHT / 4 + 5, 1);
+    //배열에 삽입
+    paintingGeoFrontArr[2] = paintingGeoFront3;
+    //그림3(정면) 텍스쳐 추가
+    texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/testImg3.jpg');
+    var paintingMaterialFront3 = new THREE.MeshPhongMaterial({
+      map: texture,
+    });
+    //배열에 삽입
+    paintingMaterialFrontArr[2] = paintingMaterialFront;
+
+    //그림3(옆면)
+    var paintingGeoSide3 = new THREE.BoxGeometry(1, UNITHEIGHT / 4 + 5, UNITWIDTH / 4 + 10);
+    //배열에 삽입
+    paintingGeoSideArr[2] = paintingGeoSide3;
+    //그림3(옆면) 텍스쳐 추가
+    texture = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/testImg4.jpeg');
+    var paintingMaterialSide3 = new THREE.MeshPhongMaterial({
+      map: texture,
+    });
+    //배열에 삽입
+    paintingMaterialSideArr[2] = paintingMaterialSide3;
+
+    //텍스처를 반복해서 촘촘하게 출력되게 한다(중요)
+    wallMaterial.map.repeat.x = 1;  //20번반복
+    wallMaterial.map.repeat.y = 1;  //20번반복
+    wallMaterial.map.wrapS = THREE.RepeatWrapping;
+    wallMaterial.map.wrapT = THREE.RepeatWrapping;
+
+    // Keep cubes within boundry walls
+    var widthOffset = UNITWIDTH / 2;
+    // Put the bottom of the cube at y = 0
+    var heightOffset = UNITHEIGHT / 2;
+    var heightOffset2 = UNITHEIGHT / 4;
+
+    // See how wide the map is by seeing how long the first array is
     totalCubesWide = map[0].length;
-  
+
     // Place walls where 1`s are
-    }
-   
+  }
+
   // 맵 생성 부문
   for (var i = 0; i < totalCubesWide; i++) {
     for (var j = 0; j < map[i].length; j++) {
       // If a 1 is found, add a cube at the corresponding position
+      
+      console.log(rNum);
       //일반벽(1)
-      if (map[i][j] == 1) {
-        // Make the cube
+      if (map[i][j] >= 1) {
+        var pointLight;
+        var color = 0xFFFFFF;
+        var intensity = 2;
+
+        var photoFrame;
+        var photo;
         var wall = new THREE.Mesh(wallGeo, wallMaterial);
         wall.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
         wall.position.y = heightOffset;
         wall.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-        scene.add(wall);
-        collidableObjects.push(wall);
-      }
-      //전시기둥(그림_앞쪽)(2)
-      if (map[i][j] == 2) {
-        // Make the cube
-        var wall = new THREE.Mesh(wallGeo2, wallMaterial2);
-        var photoFrame = new THREE.Mesh(frameGeoFront, frameMaterialFront);
-        var photo = new THREE.Mesh(paintingGeoFront, paintingMaterialFront);
 
-        wall.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-        wall.position.y = heightOffset2;
-        wall.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-        photoFrame.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset +8;
-        photoFrame.position.y = heightOffset2+10;
-        photoFrame.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-
-        photo.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset +8.6;
-        photo.position.y = heightOffset2+10;
-        photo.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
+        //랜덤수를 담을 변수(액자를 랜덤하게 출력하기위함)
+        //0에서 배열 길이 만큼의 수를 생성
+      var rNum = Math.floor( Math.random() *  frameGeoFrontArr.length);
         
+
+        //전시벽(그림_앞쪽)(3)
+        if (map[i][j] == 3) {
+          // Make the cube
+          photoFrame = new THREE.Mesh(frameGeoFrontArr[rNum], frameMaterialFrontArr[rNum]);
+          photo = new THREE.Mesh(paintingGeoFrontArr[rNum], paintingMaterialFrontArr[rNum]);
+          //조명 생성
+          pointLight = new THREE.PointLight(color, intensity);
+          
+         
+
+
+          photoFrame.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset + 47;
+          photoFrame.position.y = heightOffset - 30;
+          photoFrame.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
+
+          photo.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset + 47.6;
+          photo.position.y = heightOffset2 + 7.5;
+          photo.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
+
+          pointLight.position.set(photo.position.x, photo.position.y+5,  photo.position.z+20);
+          
+
+        }
+        //전시벽(그림왼쪽)(4)
+        if (map[i][j] == 4) {
+          // Make the cube
+          photoFrame = new THREE.Mesh(frameGeoSideArr[rNum], frameMaterialSideArr[rNum]);
+          photo = new THREE.Mesh(paintingGeoSideArr[rNum], paintingMaterialSideArr[rNum]);
+
+          //조명 생성
+          pointLight = new THREE.PointLight(color, intensity);
+
+          photoFrame.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
+          photoFrame.position.y = heightOffset - 30;
+          photoFrame.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset + 47;
+
+          photo.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
+          photo.position.y = heightOffset2 + 7.5;
+          photo.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset + 47.6;
+
+          pointLight.position.set(photo.position.x+20, photo.position.y+5,  photo.position.z);
+
+        }
+        //전시벽(그림_뒷쪽)(5)
+        if (map[i][j] == 5) {
+          // Make the cube
+          photoFrame = new THREE.Mesh(frameGeoFrontArr[rNum], frameMaterialFrontArr[rNum]);
+          photo = new THREE.Mesh(paintingGeoFrontArr[rNum], paintingMaterialFrontArr[rNum]);
+           //조명 생성
+           pointLight = new THREE.PointLight(color, intensity);
+          
+
+          photoFrame.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset - 49;
+          photoFrame.position.y = heightOffset - 30;
+          photoFrame.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
+
+          photo.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset - 50;
+          photo.position.y = heightOffset2 + 7.5;
+          photo.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
+
+          pointLight.position.set(photo.position.x, photo.position.y+5,  photo.position.z-20);
+
+        }
+
+        //전시벽(그림_오른쪽)(6)
+        if (map[i][j] == 6) {
+          photoFrame = new THREE.Mesh(frameGeoSideArr[rNum], frameMaterialSideArr[rNum]);
+          photo = new THREE.Mesh(paintingGeoSideArr[rNum], paintingMaterialSideArr[rNum]);
+
+          //조명 생성
+          pointLight = new THREE.PointLight(color, intensity);
+
+          photoFrame.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
+          photoFrame.position.y = heightOffset - 30;
+          photoFrame.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset - 45;
+
+          photo.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
+          photo.position.y = heightOffset2 + 7.5;
+          photo.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset - 46;
+
+          pointLight.position.set(photo.position.x-20, photo.position.y+5,  photo.position.z);
+
+        }
         scene.add(wall);
-        scene.add(photoFrame);
-        scene.add(photo);
         collidableObjects.push(wall);
-        collidableObjects.push(photoFrame);
-        collidableObjects.push(photo);
+        if (map[i][j] > 1) {
+          pointLight.distance= 50;
+
+          scene.add(photoFrame);
+          scene.add(photo);
+          scene.add(pointLight);
+
+          collidableObjects.push(wall);
+          collidableObjects.push(photoFrame);
+          collidableObjects.push(photo);
+        }
+
       }
-
-      //전시벽(그림_앞쪽)(3)
-      if (map[i][j] == 3) {
-        // Make the cube
-        var wall = new THREE.Mesh(wallGeo, wallMaterial);
-        var photoFrame = new THREE.Mesh(frameGeoFront, frameMaterialFront);
-        var photo = new THREE.Mesh(paintingGeoFront, paintingMaterialFront);
-
-        wall.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-        wall.position.y = heightOffset;
-        wall.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-
-        photoFrame.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset +47;
-        photoFrame.position.y = heightOffset-30;
-        photoFrame.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-
-        photo.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset +47.6;
-        photo.position.y = heightOffset2+7.5;
-        photo.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-        
-        scene.add(wall);
-        scene.add(photoFrame);
-        scene.add(photo);
-        collidableObjects.push(wall);
-        collidableObjects.push(photoFrame);
-        collidableObjects.push(photo);
-      }
-      //전시벽(그림왼쪽)(4)
-      if (map[i][j] == 4) {
-        // Make the cube
-        var wall = new THREE.Mesh(wallGeo, wallMaterial);
-        var photoFrame = new THREE.Mesh(frameGeoSide, frameMaterialSide);
-        var photo = new THREE.Mesh(paintingGeoSide, paintingMaterialSide);
-
-        wall.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-        wall.position.y = heightOffset;
-        wall.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-
-        photoFrame.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-        photoFrame.position.y = heightOffset-30;
-        photoFrame.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset +47;
-
-        photo.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-        photo.position.y = heightOffset2+7.5;
-        photo.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset+47.6;
-        
-        scene.add(wall);
-        scene.add(photoFrame);
-        scene.add(photo);
-        collidableObjects.push(wall);
-        collidableObjects.push(photoFrame);
-        collidableObjects.push(photo);
-      }
-      //전시벽(그림_뒷쪽)(5)
-      if (map[i][j] == 5) {
-        // Make the cube
-        var wall = new THREE.Mesh(wallGeo, wallMaterial);
-        var photoFrame = new THREE.Mesh(frameGeoFront2, frameMaterialFront2);
-        var photo = new THREE.Mesh(paintingGeoFront2, paintingMaterialFront2);
-      
-        wall.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-        wall.position.y = heightOffset;
-        wall.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-
-        photoFrame.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset-49;
-        photoFrame.position.y = heightOffset-30;
-        photoFrame.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-
-        photo.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset-50;
-        photo.position.y = heightOffset2+7;
-        photo.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-        
-        scene.add(wall);
-        scene.add(photoFrame);
-        scene.add(photo);
-        collidableObjects.push(wall);
-        collidableObjects.push(photoFrame);
-        collidableObjects.push(photo);
-      }
-
-       //전시벽(그림_오른쪽)(6)
-       if (map[i][j] == 6) {
-        // Make the cube
-        var wall = new THREE.Mesh(wallGeo, wallMaterial);
-        var photoFrame = new THREE.Mesh(frameGeoSide2, frameMaterialSide2);
-        var photo = new THREE.Mesh(paintingGeoSide2, paintingMaterialSide2);
-      
-        wall.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-        wall.position.y = heightOffset;
-        wall.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-
-        photoFrame.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-        photoFrame.position.y = heightOffset-30;
-        photoFrame.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset-45;
-
-        photo.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
-        photo.position.y = heightOffset2+7;
-        photo.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset-46;
-        
-        scene.add(wall);
-        scene.add(photoFrame);
-        scene.add(photo);
-        collidableObjects.push(wall);
-        collidableObjects.push(photoFrame);
-        collidableObjects.push(photo);
-      }
-
     }
 
   }
@@ -420,7 +479,7 @@ function createGround(gallay_num) {
     var textureDirt;
     switch(gallay_num){
       case 1:
-        textureDirt = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/gallay1_floor_texture.jpg');
+        textureDirt = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/gallay1_floor_texture3.jpeg');
       break;
     }
     
@@ -433,8 +492,8 @@ function createGround(gallay_num) {
     });
 
     //텍스처를 반복해서 촘촘하게 출력되게 한다(중요)
-    groundMat.map.repeat.x=20;  //20번반복
-    groundMat.map.repeat.y=20;  //20번반복
+    groundMat.map.repeat.x=10;  //20번반복
+    groundMat.map.repeat.y=10;  //20번반복
     groundMat.map.wrapS=THREE.RepeatWrapping;
     groundMat.map.wrapT=THREE.RepeatWrapping;
   
@@ -448,7 +507,7 @@ function createGround(gallay_num) {
 function createSky() {
     // Create the ground based on the map size the matrix/cube size produced
     mapSize = totalCubesWide * UNITWIDTH;//벽 텍스쳐 추가(**추가부분**)
-    var textureDirt = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/wall_texture5.jpg');
+    var textureDirt = THREE.ImageUtils.loadTexture('/resource/3d_gallay/images/gallay1_top_texture.jpg');
 
     
     // ground
