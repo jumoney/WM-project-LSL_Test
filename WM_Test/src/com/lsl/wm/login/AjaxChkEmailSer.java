@@ -22,13 +22,13 @@ public class AjaxChkEmailSer extends HttpServlet {
 		param.setUser_email(user_email);
 		param.setUser_pw("");
 		
-		int result = UserDAO.login(param);
+		int result = UserDAO.login(param); // return媛믪씠 3�씠硫� �빐�떦 �땳�꽕�엫 議댁옱, 2硫� �궗�슜媛��뒫
 		
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 		
-		out.print(result);
+		out.print(result); // data 媛믪뿉 result ���엯
 		
 	}
 }

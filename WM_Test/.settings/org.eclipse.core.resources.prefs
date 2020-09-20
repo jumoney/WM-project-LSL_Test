@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//src/com/lsl/wm/MyUtils.java=UTF-8
+encoding//src/com/lsl/wm/SecurityUtils.java=UTF-8
+encoding//src/com/lsl/wm/db/UserDAO.java=UTF-8
+encoding//src/com/lsl/wm/login/AjaxChkEmailSer.java=UTF-8
+encoding//src/com/lsl/wm/login/AjaxChkNickname.java=UTF-8
+encoding//src/com/lsl/wm/login/JoinSer.java=UTF-8
+encoding//src/com/lsl/wm/login/LoginSer.java=UTF-8
+encoding//src/com/lsl/wm/vo/UserVO.java=UTF-8

@@ -21,12 +21,11 @@ public class LoginSer extends HttpServlet {
 		UserVO loginUser = MyUtils.getLoginUser(request);
 		
 		if(loginUser != null) {
-			response.sendRedirect("/main");
-		} else {
+			response.sendRedirect("/main"); // 濡쒓렇�씤�쓣 �뻽�뒗�뜲 login�솕硫댁쑝濡� 媛��젮怨� �븷�븣
+		} else { // 濡쒓렇�씤�쓣 �븯吏� 紐삵뻽�쓣 �븣 �떎�떆 濡쒓렇�씤�럹�씠吏�濡� �씠�룞
 			String jsp = "/WEB-INF/login/login.jsp";	
 			request.getRequestDispatcher(jsp).forward(request, response);			
 		}
-		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -40,32 +39,27 @@ public class LoginSer extends HttpServlet {
 		
 		int result = UserDAO.login(param);
 		
-		HttpSession hs = request.getSession();
-		hs.setAttribute("loginUser", param);
-		
-		if(result == 1) {
-			response.sendRedirect("/main");
-			return;
-		}
-		
 		if(result != 1) {
 			String msg = null;
 			switch(result) {
 			case 2:
-				msg = "비밀번호를 확인해 주세요";
+				msg = "鍮꾨�踰덊샇瑜� �솗�씤�빐 二쇱꽭�슂";
 				break;
 			case 3:
-				msg = "아이디를 확인해 주세요";
+				msg = "�븘�씠�뵒瑜� �솗�씤�빐 二쇱꽭�슂";
 				break;
 			default :
-				msg = "에러가 발생하였습니다.";
+				msg = "�뿉�윭媛� 諛쒖깮�븯���뒿�땲�떎.";
 			}
 			request.setAttribute("user_email", user_email);
 			request.setAttribute("msg", msg);
 			doGet(request, response);
 			return;
 		}
+		HttpSession hs = request.getSession();
+		hs.setAttribute("loginUser", param); // �꽭�뀡�뿉 UserDAO�뿉�꽌 param�뿉 set�븳 �뼐�뱾�쓣 �꽭�뀡�뿉 set
 		
+		response.sendRedirect("/main"); // 濡쒓렇�씤 �꽦怨듭떆 諛붾줈 main�럹�씠吏�濡� �씠�룞
 		
 	}
 

@@ -6,6 +6,9 @@ body {
     margin: 0px;
     overflow: hidden;
 }
+body:hover {
+    cursor: pointer;
+}
 
 
 #container {
@@ -28,8 +31,8 @@ body {
 #instructions {
     width: 100%;
     height: 100%;
-font-size: 30px;
-font-family: 'Courier New';
+    font-size: 30px;
+    font-family: 'Courier New';
     display: -webkit-box;
     display: -moz-box;
     -webkit-box-orient: horizontal;
@@ -41,4 +44,238 @@ font-family: 'Courier New';
     color: #ffffff;
     text-align: center;
     cursor: pointer;
+}
+/* 그림정보 css */
+#blocker2 {
+    position: absolute;
+    cursor: default;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeInDown;
+    animation-duration: 1s;
+}
+
+#left_div{
+    margin-left: 5%;
+    position: absolute;
+    top: 5%;
+    height: 90%;
+    width: 45%;
+    background-color:rgba(146, 128, 155, 0.8);;
+}
+#right_div{
+    margin-right: 5%;
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    height: 90%;
+    width: 45%;
+    background-color: #E5E5E5;;
+   
+}
+#painting_like_div {
+    
+    margin-top: 20%;
+    text-align: right;
+    
+}
+#painting_like_div p {
+    margin-bottom: 1.5%;
+    display: inline-block;
+    font-weight: initial;
+    color: red;
+    font-size: 50%;
+    margin-right: 3%;
+}
+#painting_like_div img {
+    font-weight: initial;
+    color: red;
+    width: 5.5%;
+    margin-right: 8%;
+}
+#left_div > img{
+    width: 85%;
+    height: 50%;
+    margin-left: 7.5%;  
+
+}
+#painting_comment {
+    
+    position: relative;
+    height: 26%;
+    width: 85%;
+    margin-left: 7.5%;
+    line-height: 20%;
+    font-size: 75%;
+    color: white;
+    
+    font-family:Arial, Helvetica, sans-serif;
+}
+#painting_comment > #painting_commnets {
+    margin-top: 10%;
+}
+
+
+/*왼쪽편 css*/
+#writer_profile {
+    height: 30%;
+    
+}
+#writer_info_div {
+    margin-top: 15%;
+    line-height: 70%;
+    height: 100%;
+   
+    
+}
+#writer_info_div img {
+    width: 22%;
+    height: 50%;
+    border-radius: 50%;
+    float: left;
+    background-image: url("/resource/3d_gallay/images/profile_img.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-right: 6%;
+    margin-left: 5%;
+    
+}
+#writer_info_div #writer_name {
+    font-weight: bold;
+    font-size: 90%;
+    line-height: 30%;
+    color: black;
+}
+#writer_info_div p{
+    font-size: 70%;
+    color: black;
+}
+#user_commnets_div {
+    height: 45%;
+   
+}
+
+#user_commnets {
+   margin-top: 3%;
+    
+    height: 20%;
+    
+   
+}
+
+#user_commnets #nickname p{
+    font-size: 75%;
+   margin-top: 50%;
+}
+#user_commnets > div {
+    float: left;
+    height: 100%;
+    
+}
+#user_commnets #nickname {
+   margin-left: 5%;
+  line-height: 10%;
+  color: black;
+}
+#user_commnets div:nth-child(2) {
+    text-align: center;
+    margin-left: 10%;
+    font-size: 90%;
+    font-weight: bold;
+    line-height: 100%;
+    color: black;
+}
+#user_commnets div:nth-child(3) {
+    text-align: center;
+    float: right;
+    margin-right: 5%;
+}
+#user_commnets div:nth-child(3) img {
+    width: 60%;
+    height: 50%;
+    margin-bottom: 0;
+}
+#user_commnets div:nth-child(3) p {
+    width: 50%;
+    margin-top: 3%;
+    font-size: 50%;
+    color: black;
+}
+#bottom_div {
+    margin-top: -15%;
+    margin-left: 5%;
+    height: 100%;
+}
+#like_div  img{
+    float: left;
+    width: 7%;
+}
+#like_div  p{
+    padding-top: 3%;
+    font-size: 80%;
+    color: #EB7F7F;
+}
+#input_comment_div {
+    height: 7%;
+}
+#input_comment_div div{
+    float:left;
+   
+}
+#input_comment_div div:nth-child(1){
+    width: 80%;
+    padding: 0% 0%;
+    height: 100%;
+    background: rgba(196, 196, 196, 0.5);
+   
+}
+#input_comment_div div:nth-child(1) input {
+    width: 98%;
+    line-height: 280%;
+    margin: 0;
+    padding: 0;
+    background: rgba(196, 196, 196, 0.0);
+    border: none;
+}
+#input_comment_div div:nth-child(2) {
+    text-align: center;
+    height: 100%;
+    font-size: 20%;
+    width: 15%;
+    font-weight: bold;
+    background: rgba(234, 234, 245, 0.5);
+}
+#input_comment_div div:nth-child(2) p {
+    margin: 10% 0%;
+    color: black;
+}
+#input_comment_div div:nth-child(2):hover {
+    cursor: pointer;
+}
+
+
+input:focus {
+outline: none;
+}
+
+textarea:focus {
+outline: none;
+}
+
+button:focus {
+outline: none;
+}
+#exit_btn {
+float: right;
+margin: 0;
+padding: 0;
+height: 0;
+margin-right: 2%;
+color: black;
+}
+#exit_btn:hover {
+cursor: pointer;
 }

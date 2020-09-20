@@ -1,0 +1,12 @@
+CREATE TABLE t_user (
+	i_user int(10) auto_increment primary key,
+    user_email varchar(30) unique not null, -- 이메일 겸 아이디
+    nickname varchar(20) unique not null, -- 닉네임
+    user_pw varchar(100) not null, -- 로그인 비밀번호
+    user_year varchar(4) not null, -- 년
+    user_month varchar(2) not null, -- 월
+    user_date varchar(2) not null, -- 일
+    news varchar(1) default 0 not null, -- 소식여부
+    r_dt datetime default now(),
+    m_dt datetime default now()
+);

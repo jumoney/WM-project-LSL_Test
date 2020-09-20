@@ -29,7 +29,7 @@ public class UserDAO {
 	}
 	
 	public static int login(UserVO param) {
-		String sql = " SELECT i_user, user_pw "
+		String sql = " SELECT i_user, nickname, user_pw "
 				   + " FROM t_user "
 				   + " WHERE user_email = ? ";
 		
@@ -44,16 +44,18 @@ public class UserDAO {
 			public int executeQuery(ResultSet rs) throws SQLException {
 				if(rs.next()) {
 					String dbPw = rs.getNString("user_pw");
+					String nickname = rs.getNString("nickname");
 					if(dbPw.equals(param.getUser_pw())) {
 						int i_user = rs.getInt("i_user");
 						
+						param.setNickname(nickname);
 						param.setUser_pw(null);
 						param.setI_user(i_user);
-						return 1; // 로그인 성공
+						return 1; // 濡쒓렇�씤 �꽦怨�
 					} else {
-						return 2; // 비밀번호 틀림
+						return 2; // 鍮꾨�踰덊샇 ��由�
 					}
-				} else return 3; // 아이디 없음
+				} else return 3; // �븘�씠�뵒 �뾾�쓬
 			}
 		});
 	}
@@ -72,9 +74,9 @@ public class UserDAO {
 			@Override
 			public int executeQuery(ResultSet rs) throws SQLException {
 				if(rs.next()) {
-					return 0; 
+					return 0; // �땳�꽕�엫�씠 議댁옱�븯硫� 0 由ы꽩
 				} else {
-					return 1;
+					return 1; // 議댁옱�븯吏� �븡�쑝硫� 1 由ы꽩
 				}
 			}
 		});

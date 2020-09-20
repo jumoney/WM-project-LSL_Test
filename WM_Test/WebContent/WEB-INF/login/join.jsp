@@ -133,15 +133,14 @@ input {
     </style>
 </head>
 <body>
- 	
         <div id="contents">
             <h2 id="join_title">회원가입</h2>
-            <form action="" id="joinFrm" method="post" onsubmit="return chk()">
+            <form action="/join" id="joinFrm" method="post" onsubmit="return chk()">
                <div class="user_email"><label for="user_email">이메일</label>
                     <input type="email" name="user_email" id="user_email" required autofocus>
                      <input type="button" value="중복확인" id="double_check" onclick="chkEmail()">
-                     <input type="hidden" name="idCheck" value="idUnCheck">
-                     <div id="idChkResult" class="msg"></div>
+                     <input type="hidden" name="eamilCheck" value="emailUnCheck">
+                     <div id="emailChkResult" class="msg"></div>
                 </div>
                 <div class="nickname">
                     <label for="nickname">닉네임</label>
@@ -152,7 +151,7 @@ input {
                 </div>
                 <div class="user_pw"><label for="user_pw">비밀번호</label>
                     <input type="password" name="user_pw" id="user_pw" required>
-                    <span id="pw_guide">8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.</span>
+                    <span id="pw_guide">8~16자 영문, 숫자, 특수문자를 사용하세요.</span>
                 </div>
                 <div class="user_pwre"> <label for="user_pwre">비밀번호확인</label>
                     <input type="password" name="user_pwre" id="user_pwre"></label>
@@ -167,7 +166,7 @@ input {
                 	<label id="news_guide" for="news"> <input type="checkbox" name="news" value="1" id="news">전시회 정보 및 소식 받기</label>
                 </div> 
                 <div class="submit_btn">
-                    <input type="submit" value="가입하기" id="submit_btn" >
+                    <input type="submit" value="가입하기" id="submit_btn">
                 </div>
              </form>
         </div>
@@ -178,18 +177,19 @@ input {
 		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 		<script>
 			function chk() {
-				if (joinFrm.user_pw.value.length < 8) {
-					alert("비밀번호는 8글자 이상이어야 합니다.")
+				if (!joinFrm.user_pw.value.match(/([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~,-])|([!,@,#,$,%,^,&,*,?,_,~,-].*[a-zA-Z0-9])/) || joinFrm.user_pw.value.length > 16) {
+					alert("8~16자 영문, 숫자, 특수문자를 사용하세요.")
 					joinFrm.user_pw.focus()
 					return false
 				} else if (joinFrm.user_pw.value != joinFrm.user_pwre.value) {
 					alert("비밀번호를 확인해주세요.")
 					joinFrm.user_pw.focus()
 					return false
-				}
+				} 
 				
-				if(joinFrm.idCheck.value != "idCheck") {
-					alert('아이디 중복확인을 해주세요.')
+				
+				if(joinFrm.emailCheck.value != "emailCheck") {
+					alert('이메일 중복확인을 해주세요.')
 					return false
 				}
 				if(joinFrm.nicknameCheck.value != "nicknameCheck") {
@@ -230,7 +230,6 @@ input {
 						return false
 					}
 				}
-	
 			}
 			
 			function chkEmail() {
@@ -242,15 +241,15 @@ input {
 				}).then(function(res) {
 					console.log(res)
 					if(joinFrm.user_email.value != '') {
-						if(res.data == 3) { //아이디 없음
-							idChkResult.innerText = '사용할 수 있는 아이디입니다.'
-							joinFrm.idCheck.value = "idCheck"
-						} else if(res.data == 2) { //아이디 중복됨
-							idChkResult.innerText = '이미 사용중입니다.'
-							joinFrm.idCheck.value = "idUnCheck"
+						if(res.data == 3) { // 이메일 DB에 없음
+							emailChkResult.innerText = '사용할 수 있는 이메일입니다.'
+							joinFrm.emailCheck.value = "emailCheck"
+						} else if(res.data == 2) { // 이메일 DB에 있음
+							emailChkResult.innerText = '이미 사용중입니다.'
+							joinFrm.emailCheck.value = "emailUnCheck"
 						}
 					} else {
-						alert('아이디를 입력해주세요')
+						alert('이메일을 입력해주세요')
 					}
 					
 				})
@@ -265,10 +264,10 @@ input {
 				}).then(function(res) {
 					console.log(res)
 					if(joinFrm.nickname.value != '') {
-						if(res.data == 1) { //아이디 없음
+						if(res.data == 1) { // 닉네임 DB에 없음
 							nicknameChkResult.innerText = '사용할 수 있는 닉네입니다.'
 							joinFrm.nicknameCheck.value = "nicknameCheck"
-						} else if(res.data == 0) { //아이디 중복됨
+						} else if(res.data == 0) { // 닉네임 DB에 있음
 							nicknameChkResult.innerText = '이미 사용중입니다.'
 							joinFrm.nicknameCheck.value = "nicknameUnCheck"
 						}
@@ -278,6 +277,7 @@ input {
 					
 				})
 			}
+
 		</script>
 
 </body>

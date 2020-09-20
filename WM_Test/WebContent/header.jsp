@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,6 +14,14 @@
 			<nav>
 				<a href="/main"><img src="/resource/main/images/logo.png" id="logo"></a> 
 				<a href="/login"><img src="/resource/main/images/login.png" id="login"></a>
+				<c:choose>
+					<c:when test="${loginUser.nickname != null}">
+						${loginUser.nickname}님 환영합니다.
+					</c:when>
+					<c:otherwise>
+						손님 환영합니다.
+					</c:otherwise>
+				</c:choose>
 				<a href="/logout">로그아웃</a></div>
 				<div class="menu">
 					<ul>

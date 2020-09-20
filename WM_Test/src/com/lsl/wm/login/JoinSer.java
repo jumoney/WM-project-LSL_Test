@@ -1,6 +1,8 @@
 package com.lsl.wm.login;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,17 +32,9 @@ public class JoinSer extends HttpServlet {
 		String user_date = request.getParameter("user_date");
 		String news = request.getParameter("news");
 		if(news == null) {
-			news = "0";
+			news = "0"; // �냼�떇諛쏄린 泥댄겕諛뺤뒪 泥댄겕瑜� �븯吏��븡�쑝硫� null媛믪씠 �꽆�뼱�샂, 泥댄겕�떆 value媛믪씤 1�씠 �꽆�뼱�샂
 		}
-		
-		System.out.println("user_email : " + user_email);
-		System.out.println("nickname : " + nickname);
-		System.out.println("enryptPw : " + encrypt_pw);
-		System.out.println("user_year : " + user_year);
-		System.out.println("user_month : " + user_month);
-		System.out.println("user_date : " + user_date);
-		System.out.println("news : " + news);
-		
+
 		UserVO param = new UserVO();
 		param.setUser_email(user_email);
 		param.setNickname(nickname);
@@ -51,9 +45,22 @@ public class JoinSer extends HttpServlet {
 		param.setNews(news);
 		
 		int result = UserDAO.insUser(param);
-		System.out.println("result = " + result);
+		
 
-		response.sendRedirect("/login");
+
+
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out=response.getWriter();
+		
+		out.println("<script language='javascript'>");
+		out.println("alert('�쉶�썝媛��엯�쓣 異뺥븯�뱶由쎈땲�떎!'); location.href='/login'"); // �꽌釉붾┸�뿉�꽌 script �깭洹� �궗�슜
+		out.println("</script>");
+		out.flush();
+		// sendRedirect �븞�맖
+		// location.href �궗�슜 �빐�빞�븿
+		
+		
+		
 	}
 
 }
