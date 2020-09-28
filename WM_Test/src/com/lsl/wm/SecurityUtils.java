@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
-public class SecurityUtils { // 鍮꾨�踰덊샇 �븫�샇�솕 湲곕쾿
+public class SecurityUtils { // 비밀번호 암호화 기법
 	public static String encryptString(String str) {
 		 String sha = "";
 

@@ -21,7 +21,7 @@ public class AjaxChkNickname extends HttpServlet {
 		UserVO param = new UserVO();
 		param.setNickname(nickname);
 		
-		int result = UserDAO.nickNameChk(param); // return媛믪씠 0�씠硫� �빐�떦 �땳�꽕�엫 議댁옱, 1�씠硫� �궗�슜 媛��뒫
+		int result = UserDAO.nickNameChk(param); // return값이 0이면 해당 닉네임 존재, 1이면 사용 가능
 		
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json");

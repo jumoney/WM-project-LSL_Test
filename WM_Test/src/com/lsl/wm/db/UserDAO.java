@@ -7,6 +7,33 @@ import java.sql.SQLException;
 import com.lsl.wm.vo.UserVO;
 
 public class UserDAO {
+	public static UserVO selUser(final int i_user) {
+		String sql = " SELECT user_email, nickname "
+				   + " FROM t_user "
+				   + " WHERE i_user = ? ";
+		
+		UserVO result = new UserVO();
+		
+		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
+			
+			@Override
+			public void prepared(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, i_user);
+			}
+			
+			@Override
+			public int executeQuery(ResultSet rs) throws SQLException {
+				if(rs.next()) {
+					result.setUser_email(rs.getNString("user_email"));
+					result.setNickname(rs.getNString("nickname"));
+				}
+				return 1;
+			}
+		});
+		
+		return result;
+	}
+	
 	public static int insUser(UserVO param) {
 		String sql = " INSERT INTO t_user " 
 				+ " (user_email, nickname, user_pw, user_year, user_month, user_date, news) " 
@@ -51,11 +78,11 @@ public class UserDAO {
 						param.setNickname(nickname);
 						param.setUser_pw(null);
 						param.setI_user(i_user);
-						return 1; // 濡쒓렇�씤 �꽦怨�
+						return 1; // 로그인 성공
 					} else {
-						return 2; // 鍮꾨�踰덊샇 ��由�
+						return 2; // 비밀번호 틀림
 					}
-				} else return 3; // �븘�씠�뵒 �뾾�쓬
+				} else return 3; // 아이디 없음
 			}
 		});
 	}
@@ -74,9 +101,9 @@ public class UserDAO {
 			@Override
 			public int executeQuery(ResultSet rs) throws SQLException {
 				if(rs.next()) {
-					return 0; // �땳�꽕�엫�씠 議댁옱�븯硫� 0 由ы꽩
+					return 0; // 닉네임이 존재하면 0 리턴
 				} else {
-					return 1; // 議댁옱�븯吏� �븡�쑝硫� 1 由ы꽩
+					return 1; // 존재하지 않으면 1 리턴
 				}
 			}
 		});

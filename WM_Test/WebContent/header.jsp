@@ -1,20 +1,64 @@
+
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
+
 <html>
+
 <head>
+
 <meta charset="UTF-8">
+
 <title></title>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+
+      rel="stylesheet">
+
 <link rel="stylesheet" type="text/css" href="/style.css">
+
 </head>
+
 <body>
 
-		<div id="header">
-			<nav>
-				<a href="/main"><img src="/resource/main/images/logo.png" id="logo"></a> 
-				<a href="/login"><img src="/resource/main/images/login.png" id="login"></a>
-				<c:choose>
+
+    <div id="headerWrap">
+        <header id="header">
+            <h1><a href="">WM</a></h1> 
+             <nav id="member">
+
+                <h2 class="hidden">회원로그인/ 가입/ 로그아웃</h2>
+                <ul>
+                    <li><a href="#"><span class="material-icons md-36">login</samp></a></li>
+                    <li><a href="#">JOIN</a></li>
+                </ul>
+            </nav>
+            <nav id="menu">
+                <h2 class="hidden">WM이용메뉴</h2>
+
+                <ul>
+                    <li id="li_1"  class="main_li"><a href="/calendar">전시일정</a></li>
+                    <li class="main_li"><a href="#">전시상세</a></li>
+                    <li class="main_li"><a href="#">커뮤니티</a>
+                       <ul class="sub_menu">
+                          <li><a href="#">공지사항</a></li>
+                          <li><a href="#">자유게시판</a></li>
+                       </ul>
+                    </li>
+                    <li><a href="#"  class="main_li">마이페이지</a>
+                       <ul class="sub_menu_2">
+                          <li><a href="#">프로필관리</a></li>
+                     <li><a href="#">전시회관리</a></li>                       
+                       </ul>
+                    </li>
+                  </ul>
+            </nav>
+
+
+           <c:choose>
 					<c:when test="${loginUser.nickname != null}">
 						${loginUser.nickname}님 환영합니다.
 					</c:when>
@@ -23,18 +67,9 @@
 					</c:otherwise>
 				</c:choose>
 				<a href="/logout">로그아웃</a></div>
-				<div class="menu">
-					<ul>
-						<a href="/calendar"><li id="m1">전시일정</li></a>
-						<a><li id="m2">기관소개</li></a>
-						<a><li id="m3">커뮤니티</li></a>
-						<a><li id="m4">이전전시</li></a>
-						<a><li id="m5">마이페이지</li></a>
-						<hr>
-					</ul>
-				</div>
-			</nav>
-		</div>
 
+
+        </header> 
+    </div>  
 </body>
 </html>

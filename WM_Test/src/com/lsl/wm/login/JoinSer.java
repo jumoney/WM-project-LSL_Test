@@ -32,7 +32,7 @@ public class JoinSer extends HttpServlet {
 		String user_date = request.getParameter("user_date");
 		String news = request.getParameter("news");
 		if(news == null) {
-			news = "0"; // �냼�떇諛쏄린 泥댄겕諛뺤뒪 泥댄겕瑜� �븯吏��븡�쑝硫� null媛믪씠 �꽆�뼱�샂, 泥댄겕�떆 value媛믪씤 1�씠 �꽆�뼱�샂
+			news = "0"; // 소식받기 체크박스 체크를 하지않으면 null값이 넘어옴, 체크시 value값인 1이 넘어옴
 		}
 
 		UserVO param = new UserVO();
@@ -53,11 +53,11 @@ public class JoinSer extends HttpServlet {
 		PrintWriter out=response.getWriter();
 		
 		out.println("<script language='javascript'>");
-		out.println("alert('�쉶�썝媛��엯�쓣 異뺥븯�뱶由쎈땲�떎!'); location.href='/login'"); // �꽌釉붾┸�뿉�꽌 script �깭洹� �궗�슜
+		out.println("alert('회원가입을 축하드립니다!'); location.href='/login'"); // 서블릿에서 script 태그 사용
 		out.println("</script>");
 		out.flush();
-		// sendRedirect �븞�맖
-		// location.href �궗�슜 �빐�빞�븿
+		// sendRedirect 안됨
+		// location.href 사용 해야함
 		
 		
 		

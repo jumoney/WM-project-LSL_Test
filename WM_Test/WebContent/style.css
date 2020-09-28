@@ -1,74 +1,298 @@
 @charset "UTF-8";
 
+@font-face {
+	font-family: 'InfinitySans-BoldA1';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/InfinitySans-BoldA1.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'S-CoreDream-8Heavy';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-8Heavy.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'RIDIBatang';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/RIDIBatang.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'NanumBarunGothic';
+	font-style: normal;
+	font-weight: 400;
+	src:
+		url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot');
+	src:
+		url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.eot?#iefix')
+		format('embedded-opentype'),
+		url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.woff')
+		format('woff'),
+		url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWeb.ttf')
+		format('truetype');
+}
+
+@font-face {
+	font-family: 'NanumBarunGothic';
+	font-style: normal;
+	font-weight: 700;
+	src:
+		url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot');
+	src:
+		url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.eot?#iefix')
+		format('embedded-opentype'),
+		url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.woff')
+		format('woff'),
+		url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebBold.ttf')
+		format('truetype')
+}
+
+@font-face {
+	font-family: 'InfinitySans-RegularA1';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/InfinitySans-RegularA1.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'NanumBarunGothic';
+	font-style: normal;
+	font-weight: 300;
+	src:
+		url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.eot');
+	src:
+		url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.eot?#iefix')
+		format('embedded-opentype'),
+		url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.woff')
+		format('woff'),
+		url('//cdn.jsdelivr.net/font-nanumlight/1.0/NanumBarunGothicWebLight.ttf')
+		format('truetype');
+}
+
+@import
+	url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap')
+	;
+
+.nanumbarungothic * {
+	font-family: 'NanumBarunGothic', sans-serif;
+}
+
+/*스타일 초기화*/
+body, h1, h2, h3, h4, h5, h6, p, ul, span {
+	margin: 0;
+	padding: 0;
+}
+
 body {
-	background: #FFFCFE
-}
-a{text-decoration: none;}
-
-
-
-#header {
-	position: fixed;
-	width: 1440px;
-	height: 215px;
-	height: 248px;
-	left: calc(50% - 1440px/ 2);
-	margin-bottom: 50px;
-	top: 0px;
-	background: #FFFCFE;
-	z-index: 9999;
+	font-family: 'InfinitySans-BoldA1';
 }
 
-#contents {
-	position: relative;
-	width: 1398px;
-	margin-top:260px;
-}
-
-#footer {
-	position: absolute;
-	width: 1440px;
-	height: 78px;
-	left: 0px;
-	top: 1740px;
-}
-
-#logo {
-	width: 320px;
-	height: 228px;
-}
-
-#login {
-	position: absolute;
-	width: 88.15px;
-	height: 47px;
-	left: 1221px;
-	top: 43px;
-}
-
-.menu ul {
-	position: absolute;
-	width: 837px;
-	height: 51px;
-	left: 400px;
-	top: 134px;
+li {
 	list-style: none;
 }
 
-.menu li {
-	float: left;
-	margin-left: 60px;
-	font-size: 1.3em;
-	font-weight: bold;
-	margin-bottom: 1%;
-	cursor: pointer;
+a {
+	text-decoration: none;
+	color: #333;
 }
 
-hr {
-	clear: both;
+/*h2 , h1 화면에서 빼주기*/
+.hidden {
+	position: absolute;
+	left: -9999px;
+}
+
+/*헤더*/
+#headerWrap {
+	position: fixed;
+	top: 0;
+	height: 250px;
+	width: 100%;
+	background-color: #FFFCFE;
+	z-index: 988;
+}
+
+#header {
+	position: relative;
+	z-index: 9999;
+	width: 1200px;
+	margin: 10px auto;
+	font-family:'InfinitySans-BoldA1';
+}
+
+#header h1 {
+	width: 280px;
+	float: left;
+	margin-top: 20px;
+	background-color: #FFFCFE;
+}
+
+#header h1 a {
+	display: block;
+	height: 210px;
+	text-indent: -5000px;
+	background: url(/resource/main/images/logo.png) no-repeat;
+}
+
+#header nav {
 	float: right;
-	width: 940px;
-	margin-left: 10%;
-	border: 1px solid rgba(39, 47, 89, 0.29);
-	box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+	margin-right: 80px;
+}
+
+#header #member ul {
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center;
+	margin-top: 30px;
+}
+
+#header #member ul li:first-child {
+	margin-right: 30px;
+}
+
+#header #member ul li:last-child {
+	margin-right: 55px;
+	font-family: 'NanumBarunGothic';
+	font-weight: 700;
+}
+
+#header #menu {
+	float: right;
+	width: 800px;
+	margin-left: 0px;
+	margin-top: 30px;
+	border-bottom: 1.5px solid rgba(39, 47, 89, 0.29);
+}
+
+#header #menu ul>#li_1 {
+	margin-left: 200px;
+}
+
+#menu ul .main_li {
+	float: left;
+	margin: 10px 40px 0;
+	line-height: 70px;
+	font-size: 20px;
+}
+
+#header #member {
+	float: right;
+	margin-right: 30px;
+}
+
+#header #member ul .main_li {
+	float: left;
+	margin: 18px 20px;
+}
+
+.material-icons.md-36 {
+	font-size: 36px;
+}
+
+#menu ul li {
+	position: relative;
+}
+
+.sub_menu {
+	display: flex;
+	width: 150px;
+	flex-flow: column wrap;
+	position: absolute;
+	top: 70px;
+	left: -40px;
+	margin: 0;
+	padding: 0;
+	opacity: 0;
+	background: #ccc0ab;
+	border-radius: 0 0 5px 5px;
+	transition: opacity .25s ease .1s;
+}
+
+#menu li:hover>ul {
+	opacity: 1;
+}
+
+.sub_menu li {
+	line-height: 50px;
+	font-family: 'InfinitySans-RegularA1';
+	font-size: 17px;
+	margin: 0 auto;
+}
+
+.sub_menu li:last-child {
+	margin-bottom: 20px;
+}
+
+.sub_menu li:first-child {
+	margin-top: 10px;
+}
+
+.sub_menu_2 li {
+	line-height: 50px;
+	font-size: 17px;
+	font-family: 'InfinitySans-RegularA1';
+	margin: 0 auto;
+}
+
+.sub_menu_2 li:first-child {
+	margin-top: 10px;
+}
+
+.sub_menu_2 li:last-child {
+	margin-bottom: 20px;
+}
+
+.sub_menu_2 {
+	display: flex;
+	width: 150px;
+	flex-flow: column wrap;
+	position: absolute;
+	top: 80px;
+	right: 20px;
+	margin: 0;
+	padding: 0;
+	opacity: 0;
+	background: #ccc0ab;
+	border-radius: 0 0 5px 5px;
+	transition: opacity .25s ease .1s;
+}
+
+.menu ul li {
+	height: 0;
+	overflow: hidden;
+	padding: 0;
+	font-size: 18px;
+	transition: height .25s ease .1s;
+}
+
+.menu li:hover>ul li {
+	height: 30px;
+	overflow: visible;
+	padding: 0;
+	margin: 0;
+	line-height: 0;
+}
+
+.menu ul li a {
+	width: 100px;
+	padding: 0;
+	margin: 0;
+	border: none;
+	border-bottom: 1px solid #353539;
+}
+
+.menu ul li:last-child a {
+	border: none;
 }

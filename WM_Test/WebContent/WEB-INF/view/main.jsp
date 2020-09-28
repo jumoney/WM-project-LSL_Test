@@ -7,14 +7,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Main</title>
+
 <style>
+#footer {
+	position: absolute;
+	width: 1440px;
+	height: 78px;
+	left: 0px;
+	top: 1740px;
+}
+
 #container {
 	display: flex;
-	width: 1382px;
-	height: 1356px;
+	width: 1000px;
 	margin: 5px auto;
 	justify-content: center;
+	font-family: 'RIDIBatang';
+	font-weight: 300;
 }
+
+#contents {
+	position: relative;
+	width: 900px;
+	margin-top: 280px;
+}
+
 .poster {
 	display: flex;
 	justify-content: center;
@@ -31,11 +48,10 @@
 
 .hr1_l {
 	display: inline-block;
-	width: 480px;
+	width: 450px;
 	height: 0px;
 	border: 1px solid #7C6615;
 	margin-left: 0;
-	margin-right: 50px:
 }
 
 .now {
@@ -47,12 +63,12 @@
 
 #now p {
 	margin: 10px;
-	font-size: 1.5em;
+	font-size: 28px;
 }
 
 .hr1_r {
 	display: inline-block;
-	width: 480px;
+	width: 450px;
 	height: 0px;
 	border: 1px solid #7C6615;
 }
@@ -82,16 +98,15 @@
 
 .hr2_l {
 	display: inline-block;
-	width: 430px;
+	width: 400px;
 	height: 0px;
 	border: 1px solid #7C6615;
 	margin-left: 0;
-	margin-right: 50px:
 }
 
 .hr2_r {
 	display: inline-block;
-	width: 430px;
+	width: 400px;
 	height: 0px;
 	border: 1px solid #7C6615;
 }
@@ -100,12 +115,12 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin: 50px auto
+	margin: 30px auto
 }
 
-#coming_soon p {
+#coming_soosn> p {
 	margin: 10px;
-	font-size: 1.5em;
+	font-size: 28px;
 }
 
 #coming_schedua {
@@ -124,14 +139,25 @@
 
 #coming_schedua p {
 	text-align: center;
+	font-size: 28px;
 }
 
-#schedua .title {
-	font-style: normal;
-	font-weight: normal;
-	font-size: 30px;
+.more a{display: flex;
+	align-items:center;
+	margin:30px 15px 3px 830px;
+	height: 45px;
+	color: #bbaf7f;} 
+.more .t_more{font-size:12px}
+
+
+
+.title {
+	font-family:'Merriweather', serif;
+	font-size:30px;
+	font-weight:700;
 	line-height: 42px;
 	text-align: center;
+	margin: 20px;
 	text-decoration-line: underline;
 	text-transform: capitalize;
 	color: #7C6615;
@@ -146,7 +172,7 @@
 
 #recruitment p {
 	margin: 10px;
-	font-size: 1.5em;
+	font-size: 28px;
 }
 
 #recruitment_schedua {
@@ -166,15 +192,17 @@
 #recruitment_schedua p {
 	text-align: center;
 }
-}
+
 </style>
 </head>
 <body>
-	<jsp:include page="../../header.jsp"></jsp:include>
+
 	<div id="container">
+		<jsp:include page="../../header.jsp"></jsp:include>
 		<div id="contents">
 			<div class="poster">
-				<a href="/introduce"><img src="image/main.png" id="main"></a>
+				<a href="/introduce"><img src="resource/main/images/main.png"
+					id="main"></a>
 			</div>
 			<div id="schedua">
 				<div id="now">
@@ -187,17 +215,20 @@
 						<ul>
 							<li>2020. 08. 22 ~ 2020. 09. 22
 								<p>고흐전
-								<p>
+								</p>
 							</li>
 							<li>2020. 09. 22 ~ 2020. 10. 22
 								<p>현대미술
-								<p>
+								</p>
 							</li>
 							<li>2020. 08. 22 ~ 2020. 09. 22
 								<p>하이선</p>
 							</li>
 						</ul>
 					</div>
+				<div class="more"><a href="/calendar">
+					<span class="material-icons md-20">more_horiz</span><span class="t_mores">More</span></a></div>
+				</div>
 				</div>
 				<div id="coming_soon">
 					<div class="coming_soon">
@@ -209,17 +240,21 @@
 						<ul>
 							<li>2020. 08. 22 ~ 2020. 09. 22
 								<p>고흐전
-								<p>
+								</p>
 							</li>
 							<li>2020. 09. 22 ~ 2020. 10. 22
 								<p>현대미술
-								<p>
+								</p>
 							</li>
 							<li>2020. 08. 22 ~ 2020. 09. 22
 								<p>하이선</p>
 							</li>
+							
 						</ul>
+						
 					</div>
+				<div class="more"><a href="/calendar">
+					<span class="material-icons md-20">more_horiz</span><span class="t_mores">More</span></a></div>
 				</div>
 				<div id="recruitment">
 					<div class="recruitment">
@@ -231,23 +266,25 @@
 						<ul>
 							<li>2020. 08. 22 ~ 2020. 09. 22
 								<p>고흐전
-								<p>
+								</p>
 							</li>
 							<li>2020. 09. 22 ~ 2020. 10. 22
 								<p>현대미술
-								<p>
+								</p>
 							</li>
 							<li>2020. 08. 22 ~ 2020. 09. 22
 								<p>하이선</p>
 							</li>
 						</ul>
 					</div>
+				<div class="more"><a href="/calendar">
+					<span class="material-icons md-20">more_horiz</span><span class="t_mores">More</span></a></div>
+				</div>
 				</div>
 			</div>
 
 		</div>
 	</div>
-
 
 </body>
 </html>

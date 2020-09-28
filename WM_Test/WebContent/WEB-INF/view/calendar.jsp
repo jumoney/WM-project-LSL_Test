@@ -6,38 +6,70 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WM 웹 전시관</title>
+	<jsp:include page="../../header.jsp"></jsp:include>
 <style>
+
+#footer {
+	position: absolute;
+	width: 1440px;
+	height: 78px;
+	left: 0px;
+	top: 1740px;
+}
+
 #container {
+	font-family: 'NanumBarunGothic', sans-serif;
+	
 	display: flex;
-	width: 1350px;
-	height: 1356px;
+	width: 1000px;
 	margin: 5px auto;
 	justify-content: center;
+	font-weight: 500;
+}
+
+#contents {
+	position: relative;
+	width: 900px;
+	margin-top: 280px;
 }
 
 #schedua {
 	display: flex;
 	justify-content: space-between;
-	width: 1200px;
+
 }
 
 #schedua li {
-	font-size: 1.2em
+	
+	margin: 10px auto;
 }
+p{font-size: 20px; text-align: center}
 
-#now {
-	background: cornflowerblue;
-	padding: 10px;
-}
+#now, #coming_soon, #recruitment{width: 260px; text-align: center; padding: 10px;}
+#now_schedua {
+	background: #CBC5AC; padding:15px}
+	
+#coming_schedua{
+background:rgba(224, 218, 200, 1);  padding:15px}
+
+#recruitment_schedua{
+background:#E5D8AE;  padding:15px}
 
 .now {
 	display: flex;
 	flex-direction: column;
 }
 
-.now .title {
+.title {
+	ont-family:'Merriweather', serif;
+	font-size:26px;
+	font-weight:400;
+	line-height: 42px;
 	text-align: center;
-	font-size: 1.5em;
+	margin: 20px;
+	text-decoration-line: underline;
+	text-transform: capitalize;
+	color: #7C6615;
 }
 
 #now_schedua {
@@ -58,8 +90,8 @@
 </style>
 </head>
 <body>
+
 	<div id="container">
-		<jsp:include page="../../header.jsp"></jsp:include>
 		<div id="contents">
 			<div id="schedua">
 				<div id="now">
@@ -70,11 +102,33 @@
 						<ul>
 							<li>2020. 08. 22 ~ 2020. 09. 22
 								<p>고흐전
-								<p>
+								</p>
 							</li>
 							<li>2020. 09. 22 ~ 2020. 10. 22
 								<p>현대미술
-								<p>
+								</p>
+							</li>
+							<li>2020. 08. 22 ~ 2020. 09. 22
+								<p>하이선</p>
+							</li>
+									<li>2020. 08. 22 ~ 2020. 09. 22
+								<p>고흐전
+								</p>
+							</li>
+							<li>2020. 09. 22 ~ 2020. 10. 22
+								<p>현대미술
+								</p>
+							</li>
+							<li>2020. 08. 22 ~ 2020. 09. 22
+								<p>하이선</p>
+							</li>
+									<li>2020. 08. 22 ~ 2020. 09. 22
+								<p>고흐전
+								</p>
+							</li>
+							<li>2020. 09. 22 ~ 2020. 10. 22
+								<p>현대미술
+								</p>
 							</li>
 							<li>2020. 08. 22 ~ 2020. 09. 22
 								<p>하이선</p>
@@ -90,11 +144,11 @@
 						<ul>
 							<a href="/introduce"><li>2020. 08. 22 ~ 2020. 09. 22
 									<p>고흐전
-									<p>
+									</p>
 							</li></a>
 							<li>2020. 09. 22 ~ 2020. 10. 22
 								<p>현대미술
-								<p>
+								</p>
 							</li>
 							<li>2020. 08. 22 ~ 2020. 09. 22
 								<p>하이선</p>
@@ -110,11 +164,11 @@
 						<ul>
 							<li>2020. 08. 22 ~ 2020. 09. 22
 								<p>고흐전
-								<p>
+								</p>
 							</li>
 							<li>2020. 09. 22 ~ 2020. 10. 22
 								<p>현대미술
-								<p>
+								</p>
 							</li>
 							<li>2020. 08. 22 ~ 2020. 09. 22
 								<p>하이선</p>

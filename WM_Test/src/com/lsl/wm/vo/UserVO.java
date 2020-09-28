@@ -2,13 +2,13 @@ package com.lsl.wm.vo;
 
 public class UserVO {
 	private int i_user;
-	private String user_email; // �씠硫붿씪
-	private String nickname; // �땳�꽕�엫
-	private String user_pw; // 濡쒓렇�씤 鍮꾨�踰덊샇
-	private String user_year; // �뀈
-	private String user_month; // �썡
-	private String user_date; // �씪
-	private String news; // �냼�떇�뿬遺�
+	private String user_email; // 이메일
+	private String nickname; // 닉네임
+	private String user_pw; // 로그인 비밀번호
+	private String user_year; // 년
+	private String user_month; // 월
+	private String user_date; // 일
+	private String news; // 소식여부
 	
 	
 	public int getI_user() {

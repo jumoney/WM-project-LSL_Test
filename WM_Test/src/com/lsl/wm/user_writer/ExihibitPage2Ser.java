@@ -24,7 +24,7 @@ public class ExihibitPage2Ser extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int list_count = Integer.parseInt(request.getParameter("exhibit_list_cnt"));
 		List<WorkVO> list = new ArrayList();
-		
+		/*
 		for(int i=0; i<list_count; i++) {
 			WorkVO vo = new WorkVO();
 			String title = request.getParameter("input_title_" + i);
@@ -33,6 +33,7 @@ public class ExihibitPage2Ser extends HttpServlet {
 			vo.setComment(comment);
 			list.add(vo);
 		}
+		*/
 		request.setAttribute("workList", list);
 		
 		doGet(request, response);

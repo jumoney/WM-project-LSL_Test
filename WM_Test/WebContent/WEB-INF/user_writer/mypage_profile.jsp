@@ -93,13 +93,10 @@
             </div>
             <div class="main">
                 <form>
-                    <div>
-                        <label for="email">이메일</label>  <br>
-                        <input type="email" name="email" id="email"><br>
-                    </div>
+                    이메일 : ${data.user_email}
                     <div>
                         <label for="nick">닉네임</label> <br>
-                        <input type="text" name="nick" id="nick"><button id="conf">중복확인</button>
+                        <input type="text" name="nick" id="nick" value="${data.nickname}"><button id="conf">중복확인</button>
                     </div>
                     <div>
                         <label for="pw">비밀번호</label><br>

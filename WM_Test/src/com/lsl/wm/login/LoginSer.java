@@ -21,8 +21,8 @@ public class LoginSer extends HttpServlet {
 		UserVO loginUser = MyUtils.getLoginUser(request);
 		
 		if(loginUser != null) {
-			response.sendRedirect("/main"); // 濡쒓렇�씤�쓣 �뻽�뒗�뜲 login�솕硫댁쑝濡� 媛��젮怨� �븷�븣
-		} else { // 濡쒓렇�씤�쓣 �븯吏� 紐삵뻽�쓣 �븣 �떎�떆 濡쒓렇�씤�럹�씠吏�濡� �씠�룞
+			response.sendRedirect("/main"); // 로그인을 했는데 login화면으로 가려고 할때
+		} else { // 로그인을 하지 못했을 때 다시 로그인페이지로 이동
 			String jsp = "/WEB-INF/login/login.jsp";	
 			request.getRequestDispatcher(jsp).forward(request, response);			
 		}
@@ -43,13 +43,13 @@ public class LoginSer extends HttpServlet {
 			String msg = null;
 			switch(result) {
 			case 2:
-				msg = "鍮꾨�踰덊샇瑜� �솗�씤�빐 二쇱꽭�슂";
+				msg = "비밀번호를 확인해 주세요";
 				break;
 			case 3:
-				msg = "�븘�씠�뵒瑜� �솗�씤�빐 二쇱꽭�슂";
+				msg = "아이디를 확인해 주세요";
 				break;
 			default :
-				msg = "�뿉�윭媛� 諛쒖깮�븯���뒿�땲�떎.";
+				msg = "에러가 발생하였습니다.";
 			}
 			request.setAttribute("user_email", user_email);
 			request.setAttribute("msg", msg);
@@ -57,9 +57,9 @@ public class LoginSer extends HttpServlet {
 			return;
 		}
 		HttpSession hs = request.getSession();
-		hs.setAttribute("loginUser", param); // �꽭�뀡�뿉 UserDAO�뿉�꽌 param�뿉 set�븳 �뼐�뱾�쓣 �꽭�뀡�뿉 set
+		hs.setAttribute("loginUser", param); // 세션에 UserDAO에서 param에 set한 얘들을 세션에 set
 		
-		response.sendRedirect("/main"); // 濡쒓렇�씤 �꽦怨듭떆 諛붾줈 main�럹�씠吏�濡� �씠�룞
+		response.sendRedirect("/main"); // 로그인 성공시 바로 main페이지로 이동
 		
 	}
 
