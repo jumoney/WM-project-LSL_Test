@@ -3,11 +3,13 @@ package com.lsl.wm.vo;
 public class WorkVO {
 	private int i_work;
 	private int i_user;
+	private int i_show;
 	private String  work_title;
 	private String work_ctnt;
 	private String work_image;
 	private String r_dt;
 	private String m_dt;
+	
 	public int getI_work() {
 		return i_work;
 	}
@@ -49,6 +51,12 @@ public class WorkVO {
 	}
 	public void setM_dt(String m_dt) {
 		this.m_dt = m_dt;
+	}
+	public int getI_show() {
+		return i_show;
+	}
+	public void setI_show(int i_show) {
+		this.i_show = i_show;
 	}
 	
 	

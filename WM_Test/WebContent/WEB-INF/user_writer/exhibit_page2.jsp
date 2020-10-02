@@ -169,7 +169,7 @@
 </style>
 
 <body>
-	<jsp:include page="../../header.jsp"></jsp:include>
+	<!--<jsp:include page="../../header.jsp"></jsp:include>-->
 	<div id="container">
 		<div id="contents">
 			<div id="my_exihibit">
@@ -177,7 +177,7 @@
 					<h2>나의 출품 목록</h2>
 					<table>
 						<tr>
-							<td>새로운 시선 2021.2(예정)</td>
+							<td>${showParam.show_title}</td>
 							<td>
 								<ul id="exhibit_list">
 
@@ -217,32 +217,24 @@
         this.like_cnt = like_cnt;
         this.cmt_cnt = cmt_cnt;
     }
-
-    /*작품 정보 배열 생성(출품 목록, 전시 목록)*/
-    var exhibitWorkInfoArr = [];
-    var exhibitionWorkInfoArr = [];
-
-    /*작품 정보 배열에 작품 정보 삽입(나중에 jsp에서 받아올 정보)*/
-    <c:forEach items="${workList}" var="item">
-		exhibitWorkInfoArr.push(new ExhibitWorkInfo('${item.title}'));
-	</c:forEach>
-
-	/*전시목록*/
-    exhibitionWorkInfoArr.push(new ExhibitionWorkInfo("목련", 100, 100));
-    exhibitionWorkInfoArr.push(new ExhibitionWorkInfo("모나미", 100, 100));
+   
 
     /*작품정보를 받아와 콘텐츠영역안에 테이블을 생성하여 보여주는 함수*/
      // 출품한 작품목록
-        function displayExhibitWorkInfo(paramArr) {
+        function displayExhibitWorkInfo() {
+    		var i = 0;
             var exhibitList = document.getElementById('exhibit_list');
             exhibitList.innerHTML = "";
-            for (var i = 0; i < paramArr.length; i++) {
+            <c:forEach items="${workList}" var="item">
                 var li = document.createElement('li');
-                li.innerHTML = `<span style="cursor: default">\${i+1}.\${paramArr[i].title}</span><a id="mod_exhibit" style="cursor: pointer" onclick="modExhibit()">수정</a>
+                li.innerHTML = `<input type="text" id="i_work_idx_\${i}" name="i_work_idx_\${i}" value="${item.i_work}">
+                <span style="cursor: default" id="work_title_idx_\${i}">\${i+1}.${item.work_title}</span><a id="mod_exhibit" style="cursor: pointer" onclick="modExhibit(\{i})">수정</a>
                 <a id="del_exhibit" style="cursor: pointer" onclick="delExhibit(\${i})">삭제</a>`;
                 exhibitList.append(li);
-            }
+                i++;
+            </c:forEach>
         }
+    /*
         // 전시한 작품목록
         function displayExhibitionWorkInfo(paramArr) {
             var exhibitionList = document.getElementById('exhibition_list');
@@ -254,19 +246,36 @@
                 exhibitionList.append(li);
             }
         }
+    */
 
 	/*출품신청 작품 수정/삭제 하는 함수*/
     function delExhibit(i){
-        if(confirm(`제목: \${exhibitWorkInfoArr[i].title}\n삭제하시겠습니까?`)){
-            exhibitWorkInfoArr.splice(i, 1);
-            alert('삭제 되었습니다.');
-            displayExhibitWorkInfo(exhibitWorkInfoArr);
+    	var title = document.getElementById(`work_title_idx_\${i}`).innerHTML;
+        if(confirm(`제목: \${title}\n삭제하시겠습니까?`)){
+        	var form = document.createElement('form'); // 폼객체 생성
+        	var objs;
+        	objs = document.createElement('input'); // 값이 들어있는 녀석의 형식
+        	objs.setAttribute('type', 'text'); // 값이 들어있는 녀석의 type
+        	objs.setAttribute('name', 'i_work'); // 객체이름
+        	objs.setAttribute('value', document.getElementById(`i_work_idx_\${i}`).value); //객체값
+        	form.appendChild(objs);
+        	var objs2;
+        	objs2 = document.createElement('input'); // 값이 들어있는 녀석의 형식
+        	objs2.setAttribute('type', 'text'); // 값이 들어있는 녀석의 type
+        	objs2.setAttribute('name', 'i_show'); // 객체이름
+        	objs2.setAttribute('value', ${showParam.i_show}); //객체값
+        	form.appendChild(objs2);
+        	form.setAttribute('method', 'post'); //get,post 가능
+        	form.setAttribute('action', "/exhibit_page2"); //보내는 url
+        	document.body.appendChild(form);
+        	form.submit();
+            
         }
     }
 
     function modExhibit(){
         if(confirm('수정 페이지로 이동하시겠습니까?')){
-            location.href = "/writer/exhibit_page1";
+            location.href = "/exhibitRegPageSer";
         }
        
     }
@@ -275,8 +284,8 @@
         alert('페이지 이동Index :' + idx);
     }
 
-    displayExhibitWorkInfo(exhibitWorkInfoArr);
-    displayExhibitionWorkInfo(exhibitionWorkInfoArr);
+    displayExhibitWorkInfo();
+    //displayExhibitionWorkInfo(exhibitionWorkInfoArr);
     </script>
 </body>
 

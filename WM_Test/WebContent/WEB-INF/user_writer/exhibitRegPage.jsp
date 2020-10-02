@@ -1,13 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
-	pageEncoding="UTF-8"%>
+    pageEncoding="EUC-KR"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<work_title>ë“±ë¡ í˜ì´ì§€1</work_title>
+<work_title>ÀÛÇ° ¼öÁ¤ ÆäÀÌÁö</work_title>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
 </head>
@@ -17,7 +16,7 @@
 	margin: 0 auto;
 	border: 1px solid black;
 }
-/*----------------------- ì¶”ê°€ ì‚¬í•­ ----------------- */
+/*----------------------- Ãß°¡ »çÇ× ----------------- */
 #exhibit_list {
 	width: 100%;
 	margin: 5% auto;
@@ -210,13 +209,13 @@ button:focus {
 		<div id="contents">
 		<div>
 		<img src="${imagePath}${data.show_poster}">
-			<h1>ì „ì‹œíšŒ ì œëª©: ${data.show_title}</h1>
-			<h2>ì „ì‹œíšŒ ì„¤ëª…: ${data.show_ctnt}</h2>
-			<h3>ì „ì‹œíšŒ ê¸°ê°„: ${data.start_dt} ~ ${data.end_dt} </h3>
+			<h1>Àü½ÃÈ¸ Á¦¸ñ: ${data.show_title}</h1>
+			<h2>Àü½ÃÈ¸ ¼³¸í: ${data.show_ctnt}</h2>
+			<h3>Àü½ÃÈ¸ ±â°£: ${data.start_dt} ~ ${data.end_dt} </h3>
 		</div>
 			<form action="/exhibit_page1" method="POST" name="exhibit_frm" enctype="multipart/form-data"
 				accept-charset="UTF-8">
-				<!-- ì–´ëŠ ì „ì‹œíšŒì¸ì§€ë¥¼  POSTë¡œ ë³´ë‚´ì£¼ê¸° ìœ„í•´ i_showì •ë³´ë¥¼ ë‹´ì•„ë†“ëŠ”ë‹¤. -->
+				<!-- ¾î´À Àü½ÃÈ¸ÀÎÁö¸¦  POST·Î º¸³»ÁÖ±â À§ÇØ i_showÁ¤º¸¸¦ ´ã¾Æ³õ´Â´Ù. -->
 				<input type="hidden" name="i_show" id="i_show" value="${data.i_show}">
 				<input type="hidden" name="list_cnt" id="list_cnt" value="">
 				<div id="exhibit_list">
@@ -224,14 +223,14 @@ button:focus {
 				</div>
 				<button id="add_work_btn" onclick='insertWorkInfo();return false;'>+</button>
 			</form>
-			<button id="exhibit_work_btn" onclick="submitExihibit()">ì¶œí’ˆí•˜ê¸°</button>
+			<button id="exhibit_work_btn" onclick="submitExihibit()">ÃâÇ°ÇÏ±â</button>
 		</div>
 		<div id="footer">
-			<h3>í‘¸í„° ì˜ì—­</h3>
+			<h3>ÇªÅÍ ¿µ¿ª</h3>
 		</div>
 	</div>
 	<script>
-        /*ì‘í’ˆì •ë³´ë¥¼ ë°›ì•„ì™€ ì½˜í…ì¸ ì˜ì—­ì•ˆì— í…Œì´ë¸”ì„ ìƒì„±í•˜ì—¬ ë³´ì—¬ì£¼ëŠ” í•¨ìˆ˜*/
+        /*ÀÛÇ°Á¤º¸¸¦ ¹Ş¾Æ¿Í ÄÜÅÙÃ÷¿µ¿ª¾È¿¡ Å×ÀÌºíÀ» »ı¼ºÇÏ¿© º¸¿©ÁÖ´Â ÇÔ¼ö*/
         function displayWorkInfo() {
         	
             var exhibitList = document.getElementById('exhibit_list');
@@ -242,28 +241,28 @@ button:focus {
                 table.innerHTML = `
                 <tr>
                 <td rowspan="2">
-                <button id="min_work_btn_0" onclick="deleteWorkInfo(0); return false;" style="visibility:hidden">ï¼</button>
+                <button id="min_work_btn_0" onclick="deleteWorkInfo(0); return false;" style="visibility:hidden">£­</button>
                 </td>
                 <td rowspan="2">
                 <div id="input_painting_0" onclick="document.all.file0.click()">
                 <input type="file" name="file0" id="file0" style="display:none" accept="image/*" onchange="updatePainting(0)">
-                <span>ì´ë¯¸ì§€ ë“±ë¡/ìˆ˜ì •</span>
+                <span>ÀÌ¹ÌÁö µî·Ï/¼öÁ¤</span>
                 <input id="work_image_idx_0" name="work_image_idx_0" type="hidden" value="">
                 </div>
                 </td>
-                <td>ì œëª©</td>
+                <td>Á¦¸ñ</td>
                 <td>
                 <input type="text" name="input_title_0" id="input_title_0" value=""></td>
                 </tr>
                 <tr>
-                <td>ì‘í’ˆì„¤ëª…</td>
+                <td>ÀÛÇ°¼³¸í</td>
                 <td><textarea name="input_comment_0" id="input_comment_0"></textarea></td>
                 </tr>`;
                 exhibitList.append(table);
         }
        
 	
-        /*í˜„ì¬ ê¹Œì§€ì˜ ì…ë ¥ì‚¬í•­ì„ ê²€ì‚¬í•˜ëŠ” í•¨ìˆ˜*/
+        /*ÇöÀç ±îÁöÀÇ ÀÔ·Â»çÇ×À» °Ë»çÇÏ´Â ÇÔ¼ö*/
         function checkInput() {
         	 var exhibitList = document.getElementById('exhibit_list');
         	var listLastIndex = exhibitList.childElementCount;
@@ -273,7 +272,7 @@ button:focus {
                     var work_ctnt = document.getElementById(`input_comment_\${i}`).value;
                     var work_image = document.getElementById(`work_image_idx_\${i}`).value;
                    
-            		//ì œëª©, ì‘í’ˆì„¤ëª…, ê·¸ë¦¼ì„ íƒ ë“±ì˜ ê¸¸ì´(ê³µë°±ë¯¸í¬í•¨)ê°€ 0ì´ë¼ë©´
+            		//Á¦¸ñ, ÀÛÇ°¼³¸í, ±×¸²¼±ÅÃ µîÀÇ ±æÀÌ(°ø¹é¹ÌÆ÷ÇÔ)°¡ 0ÀÌ¶ó¸é
     				if(work_title.replace(/\s| /gi, "").length == 0 || 
     						work_ctnt.replace(/\s| /gi, "").length == 0 || 
     						work_image.replace(/\s| /gi, "").length == 0){
@@ -284,90 +283,12 @@ button:focus {
             return true;
         }
 		
-        /*ì‘í’ˆ ëª©ë¡ì„ ì§€ìš°ëŠ” í•¨ìˆ˜*/
-        function deleteWorkInfo(idx) {
-         
-            	/*ì§€ìš¸ ì‘í’ˆì˜ íƒ€ì´í‹€ì„ ê°€ì ¸ì˜´*/
-                var work_title = document.getElementById(`input_title_\${idx}`).value;
-                var exhibitList = document.getElementById('exhibit_list');
-                var listLastIndex = exhibitList.childElementCount;
-            	
-                if(confirm(`ì œëª©: \${work_title} \nì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?`))
-                {
-                	
-                		document.getElementById("idx_" + idx).remove();
-                    	
-                      	idx++;
-                      	//ì‚­ì œí•œ idxë³´ë‹¤ í° idxë“¤ì˜ ìˆ˜ë¥¼ 1 ì¤„ì—¬ì¤€ë‹¤(ì¤„ì„ ë§ì¶˜ë‹¤.)
-                        for(var i=idx; i<listLastIndex; i++) {
-                        	 var table = document.getElementById(`idx_\${i}`);
-                             table.setAttribute('id', `idx_\${i - 1}`);
-                             var button = document.getElementById(`min_work_btn_\${i}`);
-                             button.setAttribute('id', `min_work_btn_\${i-1}`);
-                             button.setAttribute('onclick', `deleteWorkInfo(\${i-1})`);
-                             var div = document.getElementById(`input_painting_\${i}`);
-                             div.setAttribute('id', `input_painting_\${i-1}`);
-                             div.setAttribute('onclick', `document.all.file\${i-1}.click()`);
-                             var input_img = document.getElementById(`work_image_idx_\${i}`);
-                             input_img.setAttribute('id', `work_image_idx_\${i-1}`);
-                             input_img.setAttribute('name', `work_image_idx_\${i-1}`);
-                             var file = document.getElementById(`file\${i}`);
-                             file.setAttribute('id', `file\${i-1}`);
-                             file.setAttribute('name', `file\${i-1}`);
-                             file.setAttribute('onchange', `updatePainting(\${i-1})`);
-                             var input = document.getElementById(`input_title_\${i}`);
-                             input.setAttribute('id', `input_title_\${i-1}`);
-                             input.setAttribute('name', `input_title_\${i-1}`);
-                             var textarea =  document.getElementById(`input_comment_\${i}`);
-                             textarea.setAttribute('id', `input_comment_\${i-1}`);
-                             textarea.setAttribute('name', `input_comment_\${i-1}`);
-                	}
-
-                }
-              
-        }
-		
-		
-        /*ì¶”ê°€ë²„íŠ¼ì„ ëˆŒë €ì„ì‹œ ê³µë°±ì˜ ì…ë ¥ë€ì„ ë§Œë“¤ì–´ì£¼ëŠ” í•¨ìˆ˜*/
-        function insertWorkInfo() { 
-           
-            var exhibitList = document.getElementById('exhibit_list');
-            var listLastIndex = exhibitList.childElementCount;
-            console.log(listLastIndex);
-          
-                var table = document.createElement('table');
-                table.setAttribute('id', `idx_\${listLastIndex}`);
-                table.innerHTML = `
-                <tr>
-                <td rowspan="2">
-                <button id="min_work_btn_\${listLastIndex}" onclick="deleteWorkInfo(\${listLastIndex}); return false;">ï¼</button>
-                </td>
-                <td rowspan="2">
-                <div id="input_painting_\${listLastIndex}" onclick="document.all.file\${listLastIndex}.click()" style="background-image:url()">
-                <input type="file" name="file\${listLastIndex}" id="file\${listLastIndex}" style="display:none" accept="image/*" onchange="updatePainting(\${listLastIndex})">
-                <input type="hidden" name="input_image_\${listLastIndex}" id="input_image_\${listLastIndex}">
-                <span>ì´ë¯¸ì§€ ë“±ë¡/ìˆ˜ì •</span>
-                <input id="work_image_idx_\${listLastIndex}" name="work_image_idx_\${listLastIndex}" type="hidden" value="">
-                </div>
-                </td>
-                <td>ì œëª©</td>
-                <td>
-                <input type="text" name="input_title_\${listLastIndex}" id="input_title_\${listLastIndex}"></td>
-                </tr>
-                <tr>
-                <td>ì‘í’ˆì„¤ëª…</td>
-                <td><textarea name="input_comment_\${listLastIndex}" id="input_comment_\${listLastIndex}"></textarea></td>
-                </tr>`;
-                exhibitList.append(table);
-            
-        }
-		
-        /*ì´ë¯¸ì§€ ì„ íƒì‹œ ì´ë¯¸ì§€ ì €ì¥ê³¼ ì´ë¯¸ì§€ ë³€ê²½*/
+        /*ÀÌ¹ÌÁö ¼±ÅÃ½Ã ÀÌ¹ÌÁö ÀúÀå°ú ÀÌ¹ÌÁö º¯°æ*/
         function updatePainting(idx) {
            
-        	console.log("ì´ë¯¸ì§€ ë³€ê²½ í•¨ìˆ˜ ì‹¤í–‰")
+        	console.log("ÀÌ¹ÌÁö º¯°æ ÇÔ¼ö ½ÇÇà")
         	
-        	/*íŒŒì¼ ì„ íƒì‹œ ë¯¸ë¦¬ë³´ê¸° ê¸°ëŠ¥ êµ¬í˜„ë¶€*/
+        	/*ÆÄÀÏ ¼±ÅÃ½Ã ¹Ì¸®º¸±â ±â´É ±¸ÇöºÎ*/
 			const file = document.getElementById('file' + idx).files[0];
 			if(file){
 	            const reader = new FileReader();
@@ -387,18 +308,18 @@ button:focus {
         }
 		
 		
-        /*ì¶œí’ˆí•˜ê¸° ë²„íŠ¼ ëˆŒë €ì„ë•Œ í˜ì´ì§€ ì´ë™í•˜ëŠ” í˜ì´ì§€*/
+        /*ÃâÇ°ÇÏ±â ¹öÆ° ´­·¶À»¶§ ÆäÀÌÁö ÀÌµ¿ÇÏ´Â ÆäÀÌÁö*/
         function submitExihibit(){
         	var exhibitList = document.getElementById('exhibit_list');
             var listLastIndex = exhibitList.childElementCount;
 			if(checkInput()){
-				//ì´ ëª‡ ê°œì˜ ì‘í’ˆì´ ì˜¬ë¼ê°”ëŠ”ì§€ ë³´ë‚´ì£¼ê¸° ìœ„í•´ list_cntì— ë„£ì–´ì¤€ë‹¤.
+				//ÃÑ ¸î °³ÀÇ ÀÛÇ°ÀÌ ¿Ã¶ó°¬´ÂÁö º¸³»ÁÖ±â À§ÇØ list_cnt¿¡ ³Ö¾îÁØ´Ù.
 				document.getElementById('list_cnt').value = listLastIndex;
 				
-               	alert('ì¶œí’ˆì™„ë£Œ'); 
+               	alert('ÃâÇ°¿Ï·á'); 
                	document.exhibit_frm.submit();
            	}else {
-                alert('ì‘ì„±ì´ ì™„ì „ì¹˜ ì•Šì€ í…Œì´ë¸”ì´ ì¡´ì¬í•©ë‹ˆë‹¤.\nì‘ì„± í˜¹ì€ ì‚­ì œ í•´ì£¼ì„¸ìš”.');
+                alert('ÀÛ¼ºÀÌ ¿ÏÀüÄ¡ ¾ÊÀº Å×ÀÌºíÀÌ Á¸ÀçÇÕ´Ï´Ù.\nÀÛ¼º È¤Àº »èÁ¦ ÇØÁÖ¼¼¿ä.');
            	}
         }
 			

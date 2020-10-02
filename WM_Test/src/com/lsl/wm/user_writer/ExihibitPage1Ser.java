@@ -15,7 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.lsl.wm.MyUtils;
+import com.lsl.wm.db.ShowDAO;
 import com.lsl.wm.db.WorkDAO;
+import com.lsl.wm.vo.ShowVO;
 import com.lsl.wm.vo.UserVO;
 import com.lsl.wm.vo.WorkVO;
 import com.oreilly.servlet.MultipartRequest;
@@ -26,21 +28,26 @@ public class ExihibitPage1Ser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//로그인한 사용자 정보를 받아온다.
 		UserVO loginUser = MyUtils.getLoginUser(request);
-		List<WorkVO> list = new ArrayList();
+
+		ShowVO param = ShowDAO.selLatestExhibition();
 		
-		String realPath = getServletContext().getRealPath("/");
-		//String savePath = realPath + "resource/user_writer/images/exhibition/" + loginUser.getI_user() + "/";
+		String savePath = "/resource/show/images/posters/" + param.getI_show() + "/";
 		
-		list = WorkDAO.selWork(loginUser.getI_user());
+		String savePath2 = getServletContext().getRealPath("resource");
 		
-		for(int i=0; i<list.size(); i++) {
-			System.out.println(list.get(i).getWork_title());
-		}
+		System.out.println(param.getI_show() +"\n"
+				+ param.getShow_title() + "\n"
+				+ param.getShow_ctnt() + "\n"
+				+ param.getExhibit_start_dt() + "~"
+				+ param.getExhibit_end_dt());
+		System.out.println(savePath2);
 		
-		request.setAttribute("list", list);
-		//request.setAttribute("savePath", savePath);
-		
+		//전시회 정보를 보내준다.
+		request.setAttribute("data", param);
+		//jsp에서 출력해줄 포스터의 경로를 보내준다.
+		request.setAttribute("imagePath", savePath);
 		
 		String jsp = "/WEB-INF/user_writer/exhibit_page1.jsp";
 		request.getRequestDispatcher(jsp).forward(request, response);
@@ -48,31 +55,60 @@ public class ExihibitPage1Ser extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserVO loginUser = MyUtils.getLoginUser(request);
-		String savePath = getServletContext().getRealPath("works") + "/user/" + loginUser.getI_user(); //저장경로
-		int maxFileSize = 10_485_760; //1024 * 1024 * 10 (10mb) //최대 파일 사이즈 크기
-		String fileNm = "";
-		String saveFileNm = null;
-		
-		
-		
-		System.out.println("savePath : " + savePath);
-		
+		//저장경로 지정
+		String savePath = getServletContext().getRealPath("resource") + "/user_writer/images/exhibition/" + loginUser.getI_user() + "/";
+
 		//만약 폴더(디렉토리)가 없다면 폴더 생성
 		File directory = new File(savePath);
 		if(!directory.exists()) {
 			directory.mkdirs();
 		}
-		try {
-			MultipartRequest mr = new MultipartRequest(request, savePath
-					, maxFileSize, "UTF-8", new DefaultFileRenamePolicy());
+		
+		int maxFileSize = 10_485_760; //1024 * 1024 * 10 (10mb) //최대 파일 사이즈 크기
+		String fileNm = "";
+		String saveFileNm = null;
+		
+		//여러 파일을 받기 위해 멀티 리퀘스트 객체 선언 일반 request도 이걸로 받아야한다.
+		MultipartRequest mr = new MultipartRequest(request, savePath
+				, maxFileSize, "UTF-8", new DefaultFileRenamePolicy());
+		
+		/*jsp로 부터 작품 정보를 받아온다.*/
+		//리스트가 몇개 인지
+		int list_cnt = Integer.parseInt(mr.getParameter("list_cnt"));
+		//어느 전시회 인지
+		int i_show = Integer.parseInt(mr.getParameter("i_show"));
+		//지금 리스트의 최대 개수를 구해온다.(그림 제목을 pk값으로 주기 위해)
+		
+		
+		
+		for(int i=0; i<list_cnt; i++) {
+			String work_image = mr.getParameter("work_image_idx_" + i);
+			String work_title = mr.getParameter("input_title_" + i);
+			String work_ctnt = mr.getParameter("input_comment_" + i);
+			//실제 저장될 파일 이름 (전시회idx_유저idx_파일명) 위에 work_iamge는 파일명만 받아온 것이다.
+			String saveImageName = i_show  + "_" + loginUser.getI_user() + "_" +  work_image; 
 			
+			WorkVO param = new WorkVO();
+			param.setI_show(i_show);
+			param.setI_user(loginUser.getI_user());
+			param.setWork_image(saveImageName);
+			param.setWork_title(work_title);
+			param.setWork_ctnt(work_ctnt);
+			
+			WorkDAO.insWork(param);
+		}
+		
+		
+		System.out.println("savePath : " + savePath);
+		
+		try {
 			Enumeration files = mr.getFileNames();
 			
-			if(files.hasMoreElements()) {
+			while(files.hasMoreElements()) {
 				String key = (String)files.nextElement();
 				fileNm = mr.getFilesystemName(key);
 				String ext = fileNm.substring(fileNm.lastIndexOf("."));
-				saveFileNm = UUID.randomUUID() + ext;				
+				saveFileNm = i_show  + "_" + loginUser.getI_user() + "_" + fileNm;				
 				System.out.println("key : " + key);
 				System.out.println("fileNm : " + fileNm);
 				System.out.println("saveFileNm : " + saveFileNm);				
@@ -83,15 +119,9 @@ public class ExihibitPage1Ser extends HttpServlet {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		if(saveFileNm != null) { //DB에 프로필 파일명 저장
+		
 			
-		}
-		
-	
-		
-		
-		response.sendRedirect("/exhibit_page2");
-		
+		response.sendRedirect("/exhibit_page2?i_user="+ loginUser.getI_user() + "&i_show=" + i_show);
 	
 	}
 
