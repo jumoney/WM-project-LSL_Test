@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.lsl.wm.MyUtils;
 import com.lsl.wm.db.ShowDAO;
+import com.lsl.wm.db.ShowListDAO;
 import com.lsl.wm.db.WorkDAO;
+import com.lsl.wm.vo.ShowListVO;
 import com.lsl.wm.vo.ShowVO;
 import com.lsl.wm.vo.UserVO;
 import com.lsl.wm.vo.WorkVO;
@@ -30,19 +32,10 @@ public class ExihibitPage1Ser extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//로그인한 사용자 정보를 받아온다.
 		UserVO loginUser = MyUtils.getLoginUser(request);
-
+		//전시회 정보를 받아온다.
 		ShowVO param = ShowDAO.selLatestExhibition();
 		
 		String savePath = "/resource/show/images/posters/" + param.getI_show() + "/";
-		
-		String savePath2 = getServletContext().getRealPath("resource");
-		
-		System.out.println(param.getI_show() +"\n"
-				+ param.getShow_title() + "\n"
-				+ param.getShow_ctnt() + "\n"
-				+ param.getExhibit_start_dt() + "~"
-				+ param.getExhibit_end_dt());
-		System.out.println(savePath2);
 		
 		//전시회 정보를 보내준다.
 		request.setAttribute("data", param);
@@ -77,10 +70,8 @@ public class ExihibitPage1Ser extends HttpServlet {
 		int list_cnt = Integer.parseInt(mr.getParameter("list_cnt"));
 		//어느 전시회 인지
 		int i_show = Integer.parseInt(mr.getParameter("i_show"));
-		//지금 리스트의 최대 개수를 구해온다.(그림 제목을 pk값으로 주기 위해)
 		
-		
-		
+		//폼에서 넘어온 정보를 DB의 t_work에 넣어준다
 		for(int i=0; i<list_cnt; i++) {
 			String work_image = mr.getParameter("work_image_idx_" + i);
 			String work_title = mr.getParameter("input_title_" + i);
@@ -98,6 +89,17 @@ public class ExihibitPage1Ser extends HttpServlet {
 			WorkDAO.insWork(param);
 		}
 		
+		//넘어온 정보를 전시회 리스트(t_show_list)에 널어준다.
+		WorkVO vo = new WorkVO();
+		vo.setI_user(loginUser.getI_user());
+		List<WorkVO> list = WorkDAO.selWorkList(vo);
+		
+		for(int i=0; i<list.size(); i++) {
+			ShowListVO vo2 = new ShowListVO(); 
+			vo2.setI_show(list.get(i).getI_show());
+			vo2.setI_work(list.get(i).getI_work());
+			ShowListDAO.insShowList(vo2);
+		}
 		
 		System.out.println("savePath : " + savePath);
 		
@@ -121,7 +123,7 @@ public class ExihibitPage1Ser extends HttpServlet {
 		}
 		
 			
-		response.sendRedirect("/exhibit_page2?i_user="+ loginUser.getI_user() + "&i_show=" + i_show);
+		response.sendRedirect("/exhibit_page2");
 	
 	}
 

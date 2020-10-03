@@ -48,14 +48,12 @@ var isPaintingShow = false;
 
 var isExit = false;
 
-//그림 생성자 함수 선언
-function paintingDomain(i_painting, image, name, comment, likeCnt, writer) {
-  this.i_painting = i_painting;
-  this.image = image;
-  this.name = name;
-  this.comment = comment;
-  this.likeCnt = likeCnt;
-  this.writer = writer;
+//작품 생성자 함수 선언
+function workDomain(i_work, work_image, work_title, work_ctnt) {
+  this.i_work = i_work;
+  this.work_image = work_image;
+  this.work_title = work_title;
+  this.work_ctnt = work_ctnt;
 }
 
 //작가정보 생성자 함수 선언

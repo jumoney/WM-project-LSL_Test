@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.lsl.wm.MyUtils;
 import com.lsl.wm.db.ShowDAO;
+import com.lsl.wm.db.ShowListDAO;
 import com.lsl.wm.db.WorkDAO;
+import com.lsl.wm.vo.ShowListDomain;
 import com.lsl.wm.vo.ShowVO;
 import com.lsl.wm.vo.UserVO;
 import com.lsl.wm.vo.WorkVO;
@@ -25,10 +27,13 @@ public class ExihibitPage2Ser extends HttpServlet {
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String jsp = "/WEB-INF/user_writer/exhibit_page2.jsp";
-		
+		//로그인한 사용자 정보를 받아온다.
+		UserVO loginUser = MyUtils.getLoginUser(request);
+		//전시회 정보를 받아온다.
+		ShowVO showParam = ShowDAO.selLatestExhibition();
 		//exhibit_page1 서블릿 파일에서 넘어온 i_user, i_show값을 받는다.
-		int i_user = Integer.parseInt(request.getParameter("i_user"));
-		int i_show = Integer.parseInt(request.getParameter("i_show"));
+		int i_user = loginUser.getI_user();
+		int i_show = showParam.getI_show();
 		
 		System.out.println("넘어온 파라미터값:" + i_user);
 		//넘어온 파라미터 값을 넣어줄 WorkVO 객체
@@ -91,7 +96,11 @@ public class ExihibitPage2Ser extends HttpServlet {
 		}
 		
 		WorkDAO.delWork(param);
+		/*전시회 리스트 에서도 삭제한다.*/
+		ShowListDomain vo = new ShowListDomain();
+		vo.setI_work(i_work);
 		
+		ShowListDAO.delShowList(vo);
 		
 		System.out.println("넘어온 값" + i_work);
 		

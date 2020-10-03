@@ -32,7 +32,7 @@ public class WorkDAO {
 	}
 	//작품 리스트를 가져오는 메소드
 	public static List<WorkVO> selWorkList(WorkVO param) {
-		String sql = " SELECT i_work, i_user, work_title, work_images, work_ctnt"
+		String sql = " SELECT i_work, i_user, work_title, work_images, work_ctnt, i_show"
 				   + " FROM t_work ";
 		
 		if(param.getI_user() != 0 || param.getI_show() != 0) {
@@ -80,6 +80,7 @@ public class WorkDAO {
 					vo.setWork_title(rs.getString("work_title"));
 					vo.setWork_ctnt(rs.getString("work_ctnt"));
 					vo.setWork_image(rs.getString("work_images"));
+					vo.setI_show(rs.getInt("i_show"));
 					
 					list.add(vo);
 				}
@@ -91,7 +92,7 @@ public class WorkDAO {
 	}
 	
 	//작품 리스트를 가져오는 메소드
-		public static WorkVO selWork(WorkVO param) {
+	public static WorkVO selWork(WorkVO param) {
 			String sql = " SELECT i_work, i_user, work_title, work_images, work_ctnt"
 					   + " FROM t_work ";
 			
@@ -154,6 +155,35 @@ public class WorkDAO {
 			
 			return vo;
 		}
+		
+		public static int updWork(WorkVO param) {
+			String sql = " UPDATE t_work " 
+					+ " SET " 
+					+ " work_title = ?, " 
+					+ " work_ctnt = ?, ";
+			if(param.getWork_image() != null) {
+				sql += " work_images = ?, ";
+			}
+					
+					sql += " m_dt = NOW() "
+					+ " WHERE i_work = ? ";
+			
+			return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
+				
+				@Override
+				public void update(PreparedStatement ps) throws SQLException {
+					ps.setString(1, param.getWork_title());
+					ps.setString(2, param.getWork_ctnt());
+					if(param.getWork_image() != null) {
+						ps.setNString(3, param.getWork_image());
+						ps.setInt(4, param.getI_work());
+					}else {
+						ps.setInt(3, param.getI_work());
+					}
+					
+				}
+			});
+		}
 	
 	public static int delWork(WorkVO param) {
 		String sql = " DELETE " 
@@ -170,7 +200,5 @@ public class WorkDAO {
 			}
 		});
 	}
-		
 	
-
 }

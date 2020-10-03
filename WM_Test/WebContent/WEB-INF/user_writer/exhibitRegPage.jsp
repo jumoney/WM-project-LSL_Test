@@ -207,114 +207,103 @@ button:focus {
 <body>
 	<div id="container">
 		<div id="contents">
-		<div>
-		<img src="${imagePath}${data.show_poster}">
-			<h1>전시회 제목: ${data.show_title}</h1>
-			<h2>전시회 설명: ${data.show_ctnt}</h2>
-			<h3>전시회 기간: ${data.start_dt} ~ ${data.end_dt} </h3>
-		</div>
-			<form action="/exhibit_page1" method="POST" name="exhibit_frm" enctype="multipart/form-data"
-				accept-charset="UTF-8">
+			<div>
+				<img src="${imagePath}${data.show_poster}">
+				<h1>전시회 제목: ${data.show_title}</h1>
+				<h2>전시회 설명: ${data.show_ctnt}</h2>
+				<h3>전시회 기간: ${data.start_dt} ~ ${data.end_dt}</h3>
+			</div>
+			<form action="/exhibitRegPage" method="POST" name="exhibit_frm"
+				enctype="multipart/form-data" accept-charset="UTF-8">
 				<!-- 어느 전시회인지를  POST로 보내주기 위해 i_show정보를 담아놓는다. -->
-				<input type="hidden" name="i_show" id="i_show" value="${data.i_show}">
-				<input type="hidden" name="list_cnt" id="list_cnt" value="">
+				<input type="hidden" name="i_show" id="i_show"
+					value="${data.i_show}"> <input type="hidden"
+					name="list_cnt" id="list_cnt" value="">
+				<input type="hidden" name="i_work" id="i_work"
+					value="${workData.i_work}"> <input type="hidden"
+					name="list_cnt" id="list_cnt" value="">
 				<div id="exhibit_list">
-				
+					<table>
+						<tr>
+						  <td rowspan="2">
+                			<button id="min_work_btn_\${listLastIndex}" style="visibility:hidden">－</button>
+                			</td>
+							<td rowspan="2">
+								<div id="input_painting" onclick="document.all.file.click()" style="background-image:url('${workPath}${workData.work_image}')">
+									<input type="file" name="file" id="file"
+										style="display: none" accept="image/*"
+										onchange="updatePainting()"> <span>이미지 등록/수정</span> <input
+										id="work_image" name="work_image" type="hidden"
+										value="">
+								</div>
+							</td>
+							<td>제목</td>
+							<td><input type="text" name="input_title"
+								id="input_title" value="${workData.work_title}"></td>
+						</tr>
+						<tr>
+							<td>작품설명</td>
+							<td><textarea name="input_comment" id="input_comment">${workData.work_ctnt}</textarea></td>
+						</tr>
+					</table>
 				</div>
-				<button id="add_work_btn" onclick='insertWorkInfo();return false;'>+</button>
 			</form>
-			<button id="exhibit_work_btn" onclick="submitExihibit()">출품하기</button>
+			<button id="exhibit_work_btn" onclick="submitExihibit()">수정하기</button>
 		</div>
 		<div id="footer">
 			<h3>푸터 영역</h3>
 		</div>
 	</div>
 	<script>
-        /*작품정보를 받아와 콘텐츠영역안에 테이블을 생성하여 보여주는 함수*/
-        function displayWorkInfo() {
-        	
-            var exhibitList = document.getElementById('exhibit_list');
-            exhibitList.innerHTML = "";
-           
-                var table = document.createElement('table');
-                table.setAttribute('id', `idx_0`);
-                table.innerHTML = `
-                <tr>
-                <td rowspan="2">
-                <button id="min_work_btn_0" onclick="deleteWorkInfo(0); return false;" style="visibility:hidden">－</button>
-                </td>
-                <td rowspan="2">
-                <div id="input_painting_0" onclick="document.all.file0.click()">
-                <input type="file" name="file0" id="file0" style="display:none" accept="image/*" onchange="updatePainting(0)">
-                <span>이미지 등록/수정</span>
-                <input id="work_image_idx_0" name="work_image_idx_0" type="hidden" value="">
-                </div>
-                </td>
-                <td>제목</td>
-                <td>
-                <input type="text" name="input_title_0" id="input_title_0" value=""></td>
-                </tr>
-                <tr>
-                <td>작품설명</td>
-                <td><textarea name="input_comment_0" id="input_comment_0"></textarea></td>
-                </tr>`;
-                exhibitList.append(table);
-        }
+     
        
-	
         /*현재 까지의 입력사항을 검사하는 함수*/
         function checkInput() {
-        	 var exhibitList = document.getElementById('exhibit_list');
-        	var listLastIndex = exhibitList.childElementCount;
-            for (var i = 0; i < listLastIndex; i++) {
+        
             	
-            		var work_title = document.getElementById(`input_title_\${i}`).value;
-                    var work_ctnt = document.getElementById(`input_comment_\${i}`).value;
-                    var work_image = document.getElementById(`work_image_idx_\${i}`).value;
+            		var work_title = document.getElementById(`input_title`).value;
+                    var work_ctnt = document.getElementById(`input_comment`).value;
+                    var work_image = document.getElementById(`work_image`).value;
                    
             		//제목, 작품설명, 그림선택 등의 길이(공백미포함)가 0이라면
     				if(work_title.replace(/\s| /gi, "").length == 0 || 
-    						work_ctnt.replace(/\s| /gi, "").length == 0 || 
-    						work_image.replace(/\s| /gi, "").length == 0){
+    						work_ctnt.replace(/\s| /gi, "").length == 0){
                         return false;
                     }
             	
-            }
+            
             return true;
         }
 		
         /*이미지 선택시 이미지 저장과 이미지 변경*/
-        function updatePainting(idx) {
+        function updatePainting() {
            
         	console.log("이미지 변경 함수 실행")
         	
         	/*파일 선택시 미리보기 기능 구현부*/
-			const file = document.getElementById('file' + idx).files[0];
+			const file = document.getElementById('file').files[0];
 			if(file){
 	            const reader = new FileReader();
 	            reader.readAsDataURL(file);
 	            console.log(reader.result);
 	            reader.onload = () => {
-	            	document.getElementById('input_painting_' + idx).style.backgroundImage = `url(\${reader.result})`;
+	            	document.getElementById('input_painting').style.backgroundImage = `url(\${reader.result})`;
 	            }
 	        }
          
            
-            var work_image = document.getElementById('file' + idx).files[0].name;
+            var work_image = document.getElementById('file').files[0].name;
            
-            document.getElementById(`work_image_idx_\${idx}`).value = work_image;
-            console.log( document.getElementById(`work_image_idx_\${idx}`).value);
+            document.getElementById(`work_image`).value = work_image;
+            console.log( document.getElementById(`work_image`).value);
             
         }
 		
 		
         /*출품하기 버튼 눌렀을때 페이지 이동하는 페이지*/
         function submitExihibit(){
-        	var exhibitList = document.getElementById('exhibit_list');
-            var listLastIndex = exhibitList.childElementCount;
+        	
 			if(checkInput()){
-				//총 몇 개의 작품이 올라갔는지 보내주기 위해 list_cnt에 넣어준다.
-				document.getElementById('list_cnt').value = listLastIndex;
 				
                	alert('출품완료'); 
                	document.exhibit_frm.submit();
@@ -323,7 +312,6 @@ button:focus {
            	}
         }
 			
-        displayWorkInfo();
     </script>
 </body>
 

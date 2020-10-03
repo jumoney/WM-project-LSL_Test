@@ -228,7 +228,7 @@
             <c:forEach items="${workList}" var="item">
                 var li = document.createElement('li');
                 li.innerHTML = `<input type="text" id="i_work_idx_\${i}" name="i_work_idx_\${i}" value="${item.i_work}">
-                <span style="cursor: default" id="work_title_idx_\${i}">\${i+1}.${item.work_title}</span><a id="mod_exhibit" style="cursor: pointer" onclick="modExhibit(\{i})">수정</a>
+                <span style="cursor: default" id="work_title_idx_\${i}">\${i+1}.${item.work_title}</span><a id="mod_exhibit" style="cursor: pointer" onclick="modExhibit(\${i})">수정</a>
                 <a id="del_exhibit" style="cursor: pointer" onclick="delExhibit(\${i})">삭제</a>`;
                 exhibitList.append(li);
                 i++;
@@ -273,9 +273,11 @@
         }
     }
 
-    function modExhibit(){
+    function modExhibit(i){
         if(confirm('수정 페이지로 이동하시겠습니까?')){
-            location.href = "/exhibitRegPageSer";
+        	var i_work = document.getElementById(`i_work_idx_\${i}`).value;
+       
+            location.href = "/exhibitRegPage?i_work=" + i_work;
         }
        
     }
