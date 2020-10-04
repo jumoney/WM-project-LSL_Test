@@ -17,7 +17,7 @@
 		style="height: 2px; width: 2px; position: absolute; top: 50%; left: 50%; background-image: cover;"></div>
 	<script src='/resource/3d_gallay/js/libs/three.js'></script>
 	<script src="/resource/3d_gallay/js/controls/PointerLockControls.js"></script>
-	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
 
 	<div id="blocker">
 
@@ -58,8 +58,8 @@
 				<div id="writer_info_div">
 					<img>
 					<p id="writer_name"></p>
-					<p>URL: www.naver.com</p>
-					<p>국적: 네덜란드</p>
+					<p id="writer_email"></p>
+					<p></p>
 				</div>
 			</div>
 			<div id="user_commnets_div">
@@ -79,8 +79,8 @@
 			</div>
 			<div id="bottom_div">
 				<div id="like_div">
-					<img src="/resource/3d_gallay/images/icons/empty_like_icon.png"
-						alt="">
+					<img id= "like_icon_div" src="/resource/3d_gallay/images/icons/empty_like_icon.png"
+						alt="" style="cursor: pointer">
 					<p>좋아요</p>
 				</div>
 				<div id="input_comment_div">
@@ -864,13 +864,11 @@
 
     for(var j = 0; j < intersects2.length; j++) {
       if(intersects2[j].distance < distance){
-        console.log("asdasdas" + j);
         //포인터 바꿈
         document.getElementById('pointer').innerHTML = "<h1 style='color:red'>👀</h1>";
         
         var x = intersects2[j].object.position.x;
         var z = intersects2[j].object.position.z;
-        console.log("선택된 : "  + checkChoosePainting(x, z));
         choosePainting = checkChoosePainting(x, z);
         
         isNearPainting = true;
@@ -886,7 +884,6 @@
     for (var i = 0; i < intersects.length; i++) {
       // Check if there's a collision
       if (intersects[i].distance < distance) {
-        console.log(intersects[i].object.position.x);
         return true;
       }
     }
@@ -936,7 +933,28 @@
   }
 
   function showPaintingInfo(i) {
-    
+	  
+	  $.post("/gallay/gallay3d",
+		  {
+		  	method : "selI_user",
+		  	i_work : paintingDomainArr[i].i_work
+		  },
+			  function(data) {
+		 	        
+		 	       document.getElementById('painting_writer').innerHTML = '작가: ' + data.nickName;
+		 	       document.getElementById('writer_name').innerHTML = data.nickName;
+		 	      document.getElementById('writer_email').innerHTML = '이메일: ' + data.user_email;
+		 	      document.getElementById('painting_like').innerHTML = data.workLikeCnt;
+		 	      if(data.isLike == '0')
+		 	      {
+		 	    	 document.getElementById('like_icon_div').setAttribute('src', '/resource/3d_gallay/images/icons/empty_like_icon.png');
+		 	      }else{
+		 	    	 document.getElementById('like_icon_div').setAttribute('src', '/resource/3d_gallay/images/icons/like_icon.png');
+		 	      }
+		 	     document.getElementById('like_icon_div').setAttribute('onclick', `doLike(\${i})`);
+		 	      
+		 	    });
+		  
 
      document.getElementById('painting_div').setAttribute('src', paintingDomainArr[i].work_image);
      //document.getElementById('painting_like').innerHTML = paintingDomainArr[i].likeCnt;
@@ -946,6 +964,25 @@
      //document.getElementById('writer_name').innerHTML = paintingDomainArr[i].writer;
      
   }
+  //좋아요 클릭시 실행될 함수
+  function doLike(i) {
+	  $.post("/gallay/gallay3d",
+			  {
+			  	method : "doLike",
+			  	i_work : paintingDomainArr[i].i_work
+			  },
+				  function(data) {
+			 	      document.getElementById('painting_like').innerHTML = data.workLikeCnt;
+			 	      if(data.isLike == '0')
+			 	      {
+			 	    	 document.getElementById('like_icon_div').setAttribute('src', '/resource/3d_gallay/images/icons/empty_like_icon.png');
+			 	      }else{
+			 	    	 document.getElementById('like_icon_div').setAttribute('src', '/resource/3d_gallay/images/icons/like_icon.png');
+			 	      }
+			 	      
+			 	    });
+ }
+
 
   function doExit() {
     blocker2.style.display = "none";
@@ -953,7 +990,6 @@
     isPaintingShow = false;
     isExit = true;
     container.requestPointerLock();
-    console.log('함수호출');
   }
 
     </script>

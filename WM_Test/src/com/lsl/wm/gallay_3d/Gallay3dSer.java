@@ -1,6 +1,7 @@
 package com.lsl.wm.gallay_3d;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,13 +11,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONObject;
+
 import com.lsl.wm.MyUtils;
 import com.lsl.wm.db.ShowDAO;
 import com.lsl.wm.db.ShowListDAO;
+import com.lsl.wm.db.UserDAO;
+import com.lsl.wm.db.WorkDAO;
+import com.lsl.wm.db.WorkLikeDAO;
 import com.lsl.wm.vo.ShowListDomain;
 import com.lsl.wm.vo.ShowListVO;
 import com.lsl.wm.vo.ShowVO;
 import com.lsl.wm.vo.UserVO;
+import com.lsl.wm.vo.WorkLikeDomain;
+import com.lsl.wm.vo.WorkVO;
 
 
 @WebServlet("/gallay/gallay3d")
@@ -48,8 +56,80 @@ public class Gallay3dSer extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+		//로그인한 사용자 정보를 받아온다.
+		UserVO loginUser = MyUtils.getLoginUser(request);  
+		// json 형태로 리턴하기 위한 json객체 생성
+		 response.setContentType("application/x-json; charset=UTF-8");
+	     PrintWriter out = response.getWriter();
+	     //작가정보를 불러오는 json통싱이라면
+	     if(request.getParameter("method").equals("selI_user")) {
+	    	 int i_work = Integer.parseInt(request.getParameter("i_work"));
+		     //i_work값으로 작가 정보를 가져온다.
+		     WorkVO param = new WorkVO();
+		    param.setI_work(i_work); 
+		    param = WorkDAO.selWork(param);
+		    //좋아요 수를 가져온다.
+		    WorkLikeDomain domain = new WorkLikeDomain();
+		    domain.setI_work(i_work);
+		    domain = WorkLikeDAO.selWorkLikeCnt(domain);
+		    //내가 좋아요한 그림인지 여부
+		    WorkLikeDomain domain2 = new WorkLikeDomain();
+		    domain2.setI_user(loginUser.getI_user());
+		    domain2.setI_work(i_work);
+		    domain2 = WorkLikeDAO.selWorkLike(domain2);
+		    
+		    UserVO param2 = new UserVO();
+		    param2 = UserDAO.selUser(param.getI_user());
+		    
+			System.out.println("아이워크값:" + i_work);
+			System.out.println("닉네임: " + param2.getNickname());
+			System.out.println("이메일: " + param2.getUser_email());
+			
+			JSONObject jobj = new JSONObject();
+			System.out.println("좋아요:" + domain2.getIsLike());
+			jobj.put("nickName", param2.getNickname());
+			jobj.put("user_email", param2.getUser_email());
+			jobj.put("workLikeCnt", domain.getWorkLikeCnt());
+			jobj.put("isLike", domain2.getIsLike());
+			out.print(jobj.toJSONString()); // json 형식으로 출력
+	     }
+	     //좋아요 처리를 위한 json통신이라면
+	     if(request.getParameter("method").equals("doLike")) {
+	    	 int i_work = Integer.parseInt(request.getParameter("i_work"));
+	    	  //내가 좋아요한 그림인지 여부
+			    WorkLikeDomain domain2 = new WorkLikeDomain();
+			    domain2.setI_user(loginUser.getI_user());
+			    domain2.setI_work(i_work);
+			    domain2 = WorkLikeDAO.selWorkLike(domain2);
+			    if(domain2.getIsLike() != 0) {
+			    	WorkLikeDAO.delWorkLike(domain2);
+			    }else {
+			    	WorkLikeDAO.insWorkLike(domain2);
+			    }
+			    //다시 좋아요 여부를 받아온다.
+			    domain2 = WorkLikeDAO.selWorkLike(domain2);
+		    //좋아요 수를 가져온다.
+		    WorkLikeDomain domain = new WorkLikeDomain();
+		    domain.setI_work(i_work);
+		    domain = WorkLikeDAO.selWorkLikeCnt(domain);
+		    
+		    System.out.println("------------doLike------------");
+			System.out.println("아이워크값:" + i_work);
+			System.out.println("좋아요여부:" + domain2.getIsLike());
+			System.out.println("좋아요개수:" + domain2.getIsLike());
+			
+			
+			JSONObject jobj = new JSONObject();
+			jobj.put("workLikeCnt", domain.getWorkLikeCnt());
+			jobj.put("isLike", domain2.getIsLike());
+			out.print(jobj.toJSONString()); // json 형식으로 출력
+	     }
+	     
+	    
+		
+	    // 응답시 json 타입이라는 걸 명시 ( 안해주면 json 타입으로 인식하지 못함 )
 
+		
+		
+	}
 }
