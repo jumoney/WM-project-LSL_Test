@@ -65,10 +65,10 @@
 			<div id="user_commnets_div">
 				<div id="user_commnets">
 					<div id="nickname">
-						<p>모나리자</p>
+						<p id="nickname_p">모나리자</p>
 					</div>
 					<div id="comment">
-						<p>그림 너무 멋있어요!!</p>
+						<p id="comment_p">그림 너무 멋있어요!!</p>
 					</div>
 					<div id="like_cmt">
 						<img src="/resource/3d_gallay/images/icons/cmt_like_icon.png"
@@ -995,6 +995,29 @@
 			  },
 				  function(data) {
 				  document.getElementById('input_cmt').value = "";
+				  
+				  var user_commnets_div = document.getElementById('user_commnets_div');
+		 	      user_commnets_div.innerHTML = "";
+			 	      for(var i =0; i<data.length; i++) {
+			 	    	 var user_commnets = document.createElement('div');
+			 	    		user_commnets.setAttribute('id', `user_commnets`);
+			 	    		user_commnets.innerHTML = `
+									<div id="nickname">
+										<p id="nickname_p">\${data[i].nickname}</p>
+									</div>
+									<div id="comment">
+										<p id="comment_p">\${data[i].cmt}</p>
+									</div>
+									<div id="like_cmt">
+										<img src="/resource/3d_gallay/images/icons/cmt_like_icon.png"
+											alt="">
+										<p>100++</p>
+									</div>
+									<input type="hidden" id="i_work_cmt_idx\${i}" value="\${data[i].i_work_cmt}">
+								`;
+			 	    	
+			 	    	user_commnets_div.append(user_commnets);
+			 	      }
 			 	      
 			 	    });
   }

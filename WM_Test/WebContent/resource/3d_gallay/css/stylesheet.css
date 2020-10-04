@@ -166,14 +166,14 @@ body:hover {
     color: black;
 }
 #user_commnets_div {
-    height: 45%;
-   
+    height: 30%;
+   	overflow: auto;
 }
 
 #user_commnets {
    margin-top: 3%;
     
-    height: 20%;
+    height: 30%;
     
    
 }
@@ -217,7 +217,7 @@ body:hover {
     color: black;
 }
 #bottom_div {
-    margin-top: -15%;
+    margin-top: 3%;
     margin-left: 5%;
     height: 100%;
 }

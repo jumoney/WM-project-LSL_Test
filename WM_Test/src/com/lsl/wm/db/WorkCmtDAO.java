@@ -31,7 +31,7 @@ public class WorkCmtDAO {
 	
 	//댓글 리스트를 가져오는 메소드
 		public static List<WorkCmtDomain> selWorkCmtList(WorkCmtVO param) {
-			String sql = " SELECT B.nickname, A.cmt, A.r_dt, A.i_user"
+			String sql = " SELECT B.nickname, A.cmt, A.r_dt, A.i_user, A.i_work_cmt"
 					   + " FROM t_work_cmt A "
 					   + " JOIN t_user B "
 					   + " ON A.i_user = B.i_user "
@@ -54,7 +54,7 @@ public class WorkCmtDAO {
 						vo.setNickname(rs.getString("nickname"));
 						vo.setCmt(rs.getString("cmt"));
 						vo.setI_user(rs.getInt("i_user"));
-
+						vo.setI_work_cmt(rs.getInt("i_work_cmt"));
 						list.add(vo);
 					}
 					return 1;

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONObject;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
 import com.lsl.wm.MyUtils;
 import com.lsl.wm.db.ShowDAO;
 import com.lsl.wm.db.ShowListDAO;
@@ -24,6 +26,7 @@ import com.lsl.wm.vo.ShowListDomain;
 import com.lsl.wm.vo.ShowListVO;
 import com.lsl.wm.vo.ShowVO;
 import com.lsl.wm.vo.UserVO;
+import com.lsl.wm.vo.WorkCmtDomain;
 import com.lsl.wm.vo.WorkCmtVO;
 import com.lsl.wm.vo.WorkLikeDomain;
 import com.lsl.wm.vo.WorkVO;
@@ -95,6 +98,7 @@ public class Gallay3dSer extends HttpServlet {
 			jobj.put("isLike", domain2.getIsLike());
 			out.print(jobj.toJSONString()); // json 형식으로 출력
 	     }
+	     
 	     //댓글 등록을 위한 json통신이라면
 	     if(request.getParameter("method").equals("doAddCmt")) {
 	    	 int i_work = Integer.parseInt(request.getParameter("i_work"));
@@ -107,9 +111,23 @@ public class Gallay3dSer extends HttpServlet {
 			vo.setCmt(cmt);
 			
 			WorkCmtDAO.insWorkCmt(vo);
+			
+			//댓글 리스트를 받아온다.
+			List<WorkCmtDomain> list = new ArrayList();
+			vo.setI_work(i_work);
+			list = WorkCmtDAO.selWorkCmtList(vo);
+			
+			//리스트를 보내기 위해 Gson라이브러리를 활용
+			String gson = new Gson().toJson(list);
 	    	 
-			JSONObject jobj = new JSONObject();
-			out.print(jobj.toJSONString()); // json 형식으로 출력
+            try {
+                //ajax로 리턴해주는 부분
+                response.getWriter().write(gson);
+            } catch (JsonIOException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 	     }
 	     
 	   //좋아요 처리를 위한 json통신이라면
@@ -136,8 +154,7 @@ public class Gallay3dSer extends HttpServlet {
 			System.out.println("아이워크값:" + i_work);
 			System.out.println("좋아요여부:" + domain2.getIsLike());
 			System.out.println("좋아요개수:" + domain2.getIsLike());
-			
-			
+
 			JSONObject jobj = new JSONObject();
 			jobj.put("workLikeCnt", domain.getWorkLikeCnt());
 			jobj.put("isLike", domain2.getIsLike());
