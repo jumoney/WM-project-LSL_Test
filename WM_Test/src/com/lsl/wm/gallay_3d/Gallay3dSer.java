@@ -17,12 +17,14 @@ import com.lsl.wm.MyUtils;
 import com.lsl.wm.db.ShowDAO;
 import com.lsl.wm.db.ShowListDAO;
 import com.lsl.wm.db.UserDAO;
+import com.lsl.wm.db.WorkCmtDAO;
 import com.lsl.wm.db.WorkDAO;
 import com.lsl.wm.db.WorkLikeDAO;
 import com.lsl.wm.vo.ShowListDomain;
 import com.lsl.wm.vo.ShowListVO;
 import com.lsl.wm.vo.ShowVO;
 import com.lsl.wm.vo.UserVO;
+import com.lsl.wm.vo.WorkCmtVO;
 import com.lsl.wm.vo.WorkLikeDomain;
 import com.lsl.wm.vo.WorkVO;
 
@@ -93,7 +95,24 @@ public class Gallay3dSer extends HttpServlet {
 			jobj.put("isLike", domain2.getIsLike());
 			out.print(jobj.toJSONString()); // json 형식으로 출력
 	     }
-	     //좋아요 처리를 위한 json통신이라면
+	     //댓글 등록을 위한 json통신이라면
+	     if(request.getParameter("method").equals("doAddCmt")) {
+	    	 int i_work = Integer.parseInt(request.getParameter("i_work"));
+	    	 String cmt = request.getParameter("cmt");
+			
+			WorkCmtVO vo = new WorkCmtVO();
+			
+			vo.setI_work(i_work);
+			vo.setI_user(loginUser.getI_user());
+			vo.setCmt(cmt);
+			
+			WorkCmtDAO.insWorkCmt(vo);
+	    	 
+			JSONObject jobj = new JSONObject();
+			out.print(jobj.toJSONString()); // json 형식으로 출력
+	     }
+	     
+	   //좋아요 처리를 위한 json통신이라면
 	     if(request.getParameter("method").equals("doLike")) {
 	    	 int i_work = Integer.parseInt(request.getParameter("i_work"));
 	    	  //내가 좋아요한 그림인지 여부

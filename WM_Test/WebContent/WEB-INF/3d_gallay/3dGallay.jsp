@@ -85,9 +85,9 @@
 				</div>
 				<div id="input_comment_div">
 					<div>
-						<input type="text">
+						<input type="text" id="input_cmt">
 					</div>
-					<div>
+					<div id="addCmtBtn">
 						<p>게시</p>
 					</div>
 				</div>
@@ -952,6 +952,8 @@
 		 	    	 document.getElementById('like_icon_div').setAttribute('src', '/resource/3d_gallay/images/icons/like_icon.png');
 		 	      }
 		 	     document.getElementById('like_icon_div').setAttribute('onclick', `doLike(\${i})`);
+		 	     
+		 	    document.getElementById('addCmtBtn').setAttribute('onclick', `doAddCmt(\${i})`);
 		 	      
 		 	    });
 		  
@@ -982,6 +984,20 @@
 			 	      
 			 	    });
  }
+  
+  function doAddCmt(i) {
+	  var cmt = document.getElementById('input_cmt').value;
+	  $.post("/gallay/gallay3d",
+			  {
+			  	method : "doAddCmt",
+			  	i_work : paintingDomainArr[i].i_work,
+			  	cmt : cmt
+			  },
+				  function(data) {
+				  document.getElementById('input_cmt').value = "";
+			 	      
+			 	    });
+  }
 
 
   function doExit() {
