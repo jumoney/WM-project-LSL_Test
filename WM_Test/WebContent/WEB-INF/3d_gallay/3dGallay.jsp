@@ -63,19 +63,7 @@
 				</div>
 			</div>
 			<div id="user_commnets_div">
-				<div id="user_commnets">
-					<div id="nickname">
-						<p id="nickname_p">모나리자</p>
-					</div>
-					<div id="comment">
-						<p id="comment_p">그림 너무 멋있어요!!</p>
-					</div>
-					<div id="like_cmt">
-						<img src="/resource/3d_gallay/images/icons/cmt_like_icon.png"
-							alt="">
-						<p>100++</p>
-					</div>
-				</div>
+				
 			</div>
 			<div id="bottom_div">
 				<div id="like_div">
@@ -964,7 +952,8 @@
      document.getElementById('painting_name').innerHTML = '제목: ' +  paintingDomainArr[i].work_title;
      document.getElementById('writer_comment').innerHTML = paintingDomainArr[i].work_ctnt;
      //document.getElementById('writer_name').innerHTML = paintingDomainArr[i].writer;
-     
+     //댓글을 읽어오는 함수를 호출
+     doReadCmt(i);
   }
   //좋아요 클릭시 실행될 함수
   function doLike(i) {
@@ -1013,7 +1002,44 @@
 											alt="">
 										<p>100++</p>
 									</div>
-									<input type="hidden" id="i_work_cmt_idx\${i}" value="\${data[i].i_work_cmt}">
+									
+								`;
+			 	    	
+			 	    	user_commnets_div.append(user_commnets);
+			 	      }
+			 	      
+			 	    });
+  }
+  
+  function doReadCmt(i) {
+	  var cmt = document.getElementById('input_cmt').value;
+	  $.post("/gallay/gallay3d",
+			  {
+			  	method : "doReadCmt",
+			  	i_work : paintingDomainArr[i].i_work,
+			  	cmt : cmt
+			  },
+				  function(data) {
+				  document.getElementById('input_cmt').value = "";
+				  
+				  var user_commnets_div = document.getElementById('user_commnets_div');
+		 	      user_commnets_div.innerHTML = "";
+			 	      for(var i =0; i<data.length; i++) {
+			 	    	 var user_commnets = document.createElement('div');
+			 	    		user_commnets.setAttribute('id', `user_commnets`);
+			 	    		user_commnets.innerHTML = `
+									<div id="nickname">
+										<p id="nickname_p">\${data[i].nickname}</p>
+									</div>
+									<div id="comment">
+										<p id="comment_p">\${data[i].cmt}</p>
+									</div>
+									<div id="like_cmt">
+										<img src="/resource/3d_gallay/images/icons/cmt_like_icon.png"
+											alt="">
+										<p>100++</p>
+									</div>
+									
 								`;
 			 	    	
 			 	    	user_commnets_div.append(user_commnets);

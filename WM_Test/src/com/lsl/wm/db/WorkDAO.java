@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lsl.wm.vo.ShowVO;
 import com.lsl.wm.vo.UserVO;
 import com.lsl.wm.vo.WorkVO;
 
@@ -30,6 +31,35 @@ public class WorkDAO {
 			}
 		});
 	}
+	//가장 마지막에 저장된 i_work를 가져오는 메소드
+	public static WorkVO selLatestWork(WorkVO param) {
+		String sql = " SELECT "
+				+ " MAX(i_work) as i_work "
+				+ " FROM t_work "
+				+ " WHERE i_user = ? ";
+		
+		WorkVO vo = new WorkVO();
+		
+		JdbcTemplate.executeQuery(sql, new JdbcSelectInterface() {
+			
+			@Override
+			public void prepared(PreparedStatement ps) throws SQLException {
+				ps.setInt(1, param.getI_user());
+			}
+			
+			@Override
+			public int executeQuery(ResultSet rs) throws SQLException {
+				while(rs.next()) {
+					vo.setI_work(rs.getInt("i_work"));
+				
+				}
+				return 1;
+			}
+		});
+		
+		return vo;
+	}
+	
 	//작품 리스트를 가져오는 메소드
 	public static List<WorkVO> selWorkList(WorkVO param) {
 		String sql = " SELECT i_work, i_user, work_title, work_images, work_ctnt, i_show"

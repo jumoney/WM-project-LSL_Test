@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -213,7 +216,10 @@ button:focus {
 			<h1>전시회 제목: ${data.show_title}</h1>
 			<h2>전시회 설명: ${data.show_ctnt}</h2>
 			<h3>전시회 기간: ${data.start_dt} ~ ${data.end_dt} </h3>
+			<h3>전시작개수: 25개 </h3>
+			<h3>현재 전시신청중인 작품 수 :${fn:length(workList)}개</h3>
 		</div>
+		
 			<form action="/exhibit_page1" method="POST" name="exhibit_frm" enctype="multipart/form-data"
 				accept-charset="UTF-8">
 				<!-- 어느 전시회인지를  POST로 보내주기 위해 i_show정보를 담아놓는다. -->
@@ -223,7 +229,7 @@ button:focus {
 				
 				</div>
 			</form>
-			<button id="exhibit_work_btn" onclick="submitExihibit()">출품하기</button>
+			
 		</div>
 		<div id="footer">
 			<h3>푸터 영역</h3>
@@ -246,7 +252,7 @@ button:focus {
             <button id="min_work_btn_\${i}" onclick="deleteWorkInfo(\${i}); return false;">－</button>
             </td>
             <td rowspan="2">
-            <div id="input_painting_\${i}" onclick="document.all.file\${i}.click()" style="background-image:url('${workImagePath}${item.i_user}/${item.work_image}')">
+            <div id="input_painting_\${i}" onclick="" style="background-image:url('${workImagePath}${item.i_user}/${item.work_image}')">
             <input type="file" name="file\${i}" id="file\${i}" style="display:none" accept="image/*" style="visibility:hidden">
             <input type="hidden" name="input_image_\${i}" id="input_image_\${i}">
             <span style="visibility:hidden">이미지 등록/수정</span>
@@ -255,11 +261,11 @@ button:focus {
             </td>
             <td>제목</td>
             <td>
-            <input type="text" name="input_title_\${i}" id="input_title_\${i}" value="${item.work_title}"></td>
+            <input type="text" name="input_title_\${i}" id="input_title_\${i}" value="${item.work_title}" readonly></td>
             </tr>
             <tr>
             <td>작품설명</td>
-            <td><textarea name="input_comment_\${i}" id="input_comment_\${i}">${item.work_ctnt}</textarea></td>
+            <td><textarea name="input_comment_\${i}" id="input_comment_\${i}" readonly>${item.work_ctnt}</textarea></td>
             </tr>`;
             exhibitList.append(table);
             i++;
@@ -286,21 +292,6 @@ button:focus {
                     document.body.appendChild(form);
                     form.submit();
                  }
-        }
-
-        /*출품하기 버튼 눌렀을때 페이지 이동하는 페이지*/
-        function submitExihibit(){
-        	var exhibitList = document.getElementById('exhibit_list');
-            var listLastIndex = exhibitList.childElementCount;
-			if(checkInput()){
-				//총 몇 개의 작품이 올라갔는지 보내주기 위해 list_cnt에 넣어준다.
-				document.getElementById('list_cnt').value = listLastIndex;
-				
-               	alert('출품완료'); 
-               	document.exhibit_frm.submit();
-           	}else {
-                alert('작성이 완전치 않은 테이블이 존재합니다.\n작성 혹은 삭제 해주세요.');
-           	}
         }
 			
         displayWorkInfo();

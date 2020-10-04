@@ -209,7 +209,6 @@ button:focus {
 	<div id="container">
 		<div id="contents">
 		<div>
-		<img src="${imagePath}${data.show_poster}">
 			<h1>전시회 제목: ${data.show_title}</h1>
 			<h2>전시회 설명: ${data.show_ctnt}</h2>
 			<h3>전시회 기간: ${data.start_dt} ~ ${data.end_dt} </h3>

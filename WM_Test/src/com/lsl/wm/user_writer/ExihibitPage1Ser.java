@@ -87,19 +87,18 @@ public class ExihibitPage1Ser extends HttpServlet {
 			param.setWork_ctnt(work_ctnt);
 			
 			WorkDAO.insWork(param);
-		}
-		
-		//넘어온 정보를 전시회 리스트(t_show_list)에 널어준다.
-		WorkVO vo = new WorkVO();
-		vo.setI_user(loginUser.getI_user());
-		List<WorkVO> list = WorkDAO.selWorkList(vo);
-		
-		for(int i=0; i<list.size(); i++) {
+			param.setI_user(loginUser.getI_user());
+			//가장 최근에 들어간 i_work값을 가져온다.
+			param = WorkDAO.selLatestWork(param);
+			//넘어온 정보를 전시회 리스트(t_show_list)에 널어준다.
 			ShowListVO vo2 = new ShowListVO(); 
-			vo2.setI_show(list.get(i).getI_show());
-			vo2.setI_work(list.get(i).getI_work());
+			vo2.setI_show(i_show);
+			vo2.setI_work(param.getI_work());
+			System.out.println(param.getI_work());
 			ShowListDAO.insShowList(vo2);
 		}
+		
+		
 		
 		System.out.println("savePath : " + savePath);
 		

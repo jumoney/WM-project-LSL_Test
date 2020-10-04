@@ -130,6 +130,30 @@ public class Gallay3dSer extends HttpServlet {
             }
 	     }
 	     
+	   //댓글을 불러오기 위한 json통신이라면
+	     if(request.getParameter("method").equals("doReadCmt")) {
+	    	 int i_work = Integer.parseInt(request.getParameter("i_work"));
+	    	 	
+			WorkCmtVO vo = new WorkCmtVO();
+			
+			//댓글 리스트를 받아온다.
+			List<WorkCmtDomain> list = new ArrayList();
+			vo.setI_work(i_work);
+			list = WorkCmtDAO.selWorkCmtList(vo);
+			
+			//리스트를 보내기 위해 Gson라이브러리를 활용
+			String gson = new Gson().toJson(list);
+	    	 
+            try {
+                //ajax로 리턴해주는 부분
+                response.getWriter().write(gson);
+            } catch (JsonIOException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+	     }
+	     
 	   //좋아요 처리를 위한 json통신이라면
 	     if(request.getParameter("method").equals("doLike")) {
 	    	 int i_work = Integer.parseInt(request.getParameter("i_work"));

@@ -26,7 +26,7 @@ public class ExhibitionManagementPageSer extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 				//로그인한 사용자 정보를 받아온다.
 				UserVO loginUser = MyUtils.getLoginUser(request);
-				//전시회 정보를 받아온다.
+				//가장 최신 전시회 정보를 받아온다.
 				ShowVO param = ShowDAO.selLatestExhibition();
 				//전시회 작품 목록을 가져온다.
 				ShowListVO vo = new ShowListVO();
