@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,8 +83,9 @@
     </style>
 </head>
 <body>
-    <jsp:include page="../../header.jsp"></jsp:include>
+ 
 	<div id="container">
+	<jsp:include page="../../header.jsp"></jsp:include>
         <div id="contents">
             <div class="side">
                 <ul type="none">
@@ -92,27 +94,106 @@
                 </ul>
             </div>
             <div class="main">
-                <form>
-                    이메일 : ${data.user_email}
-                    <div>
-                        <label for="nick">닉네임</label> <br>
-                        <input type="text" name="nick" id="nick" value="${data.nickname}"><button id="conf">중복확인</button>
+            <div>
+				<c:choose>
+					<c:when test="${data.profile_img != null}">
+						<img src="/img/user/${loginUser.i_user}/${data.profile_img}">
+					</c:when>
+					<c:otherwise>
+						<img src="/resource/profile/default_profile.jpg">
+					</c:otherwise>
+				</c:choose>
+			</div>
+			<div>
+				<form action="/profile" method="post" enctype="multipart/form-data">
+					<div>
+						<label>프로필 이미지 : <br><input type="file" name="profile_img" accept="image/*"></label>
+						<br>
+						<input type="submit" value="업로드">
+					</div>				
+				</form>
+			</div>
+			<br>
+                	<div>
+                    	이메일 : ${data.user_email}
                     </div>
-                    <div>
-                        <label for="pw">비밀번호</label><br>
-                        <input type="password" name="pw" id="pw"><br>
-                    </div>
-                    <div>
-                        <label for="pwc">비밀번호 확인</label><br>
-                        <input type="password" name="pwc" id="pwc"><br>
-                    </div>
-                    <div id="btn">
-                        <button>변경하기</button>
-                    </div> 
-                </form>
-                 
+                    <form id="nicknameFrm" action="/changeNickname" method="post" onsubmit="return chkChangeNickname()"> 
+	                    <div class="nickname">
+	                    	<label for="nick">닉네임</label> <br>
+		                    <input type="text" name="nickname" id="nick" value="${data.nickname}">
+		                    <input id="conf" type="button" value="중복확인" id="double_check" onclick="chkNickname()">
+		                    <input type="hidden" name="nicknameCheck" value="nicknameUnCheck">
+	                    	<div id="nicknameChkResult" class="msg"></div>
+	                    	<div id="btn">
+	                      		<input type="submit" value="변경하기">
+	                   	 	</div>
+	                    </div>
+                    </form>
+                   	<br>
+	                <form id="pwFrm" action="/changePw" method="post" onsubmit="return chkChangePw()">
+	                    <div>
+	                        <label for="pw">변경 비밀번호</label><br>
+	                        <input type="password" name="pw" id="pw"><br>
+	                    </div>
+	                    <div>
+	                        <label for="pwc">변경 비밀번호 확인</label><br>
+	                        <input type="password" name="pwc" id="pwc"><br>
+	                    </div>
+	                    <div id="btn">
+	                      	<input type="submit" value="변경하기">
+	                    </div> 
+	                </form>
+	                 
             </div>
         </div>
     </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+
+
+function chkChangePw() {
+	if(pwFrm.pw.value != pwFrm.pwc.value) {
+		alert('비밀번호를 확인해 주세요.')
+		pwFrm.pw.focus()
+		return false
+	}
+
+	if(!pwFrm.pw.value.match(/([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~,-])|([!,@,#,$,%,^,&,*,?,_,~,-].*[a-zA-Z0-9])/) || pwFrm.user_pw.value.length > 16) {
+		alert("8~16자 영문, 숫자, 특수문자를 사용하세요.")
+		pwFrm.pw.focus()
+		return false
+	}
+}
+
+function chkChangeNickname() {
+	if(nicknameFrm.nicknameCheck.value != "nicknameCheck") {
+		alert('닉네임 중복확인을 해주세요.')
+		return false
+	}
+}
+
+function chkNickname() {
+	const nickname = nicknameFrm.nickname.value
+	axios.get('/ajaxnickname', {
+		params: {
+			nickname : nickname
+		} 
+	}).then(function(res) {
+		console.log(res)
+		if(nicknameFrm.nickname.value != '') {
+			if(res.data == 1) { // 닉네임 DB에 없음
+				nicknameChkResult.innerText = '사용할 수 있는 닉네입니다.'
+				nicknameFrm.nicknameCheck.value = "nicknameCheck"
+			} else if(res.data == 0) { // 닉네임 DB에 있음
+				nicknameChkResult.innerText = '이미 사용중입니다.'
+				nicknameFrm.nicknameCheck.value = "nicknameUnCheck"
+			}
+		} else {
+			alert('닉네임을 입력해주세요')
+		}
+		
+	})
+}
+</script>
 </html>

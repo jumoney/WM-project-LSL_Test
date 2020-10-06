@@ -8,7 +8,7 @@ import com.lsl.wm.vo.UserVO;
 
 public class UserDAO {
 	public static UserVO selUser(final int i_user) {
-		String sql = " SELECT user_email, nickname "
+		String sql = " SELECT user_email, nickname, profile_img "
 				   + " FROM t_user "
 				   + " WHERE i_user = ? ";
 		
@@ -26,6 +26,7 @@ public class UserDAO {
 				if(rs.next()) {
 					result.setUser_email(rs.getNString("user_email"));
 					result.setNickname(rs.getNString("nickname"));
+					result.setProfile_img(rs.getNString("profile_img"));
 				}
 				return 1;
 			}
@@ -106,6 +107,35 @@ public class UserDAO {
 					return 1; // 존재하지 않으면 1 리턴
 				}
 			}
+		});
+	}
+	
+	public static int updUser(UserVO param) {
+		StringBuilder sb = new StringBuilder(" UPDATE t_user SET m_dt = now() ");
+		if(param.getNickname() != null) {
+			sb.append(" , nickname = '");
+			sb.append(param.getNickname());
+			sb.append("' ");
+			
+		}	
+		if(param.getUser_pw() != null) {
+			sb.append(" , user_pw = '");
+			sb.append(param.getUser_pw());
+			sb.append("' ");
+		}
+		if(param.getProfile_img() != null) {
+			sb.append(" , profile_img = '");
+			sb.append(param.getProfile_img());
+			sb.append("' ");
+		}
+		
+		sb.append(" WHERE i_user = ");
+		sb.append(param.getI_user());
+		
+		return JdbcTemplate.executeUpdate(sb.toString(), new JdbcUpdateInterface() {
+			
+			@Override
+			public void update(PreparedStatement ps) throws SQLException {}
 		});
 	}
 }

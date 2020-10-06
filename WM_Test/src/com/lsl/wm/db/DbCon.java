@@ -10,11 +10,11 @@ public class DbCon {
 	public static Connection getCon() throws Exception {
 		String url = "jdbc:mysql://localhost:3306/root?serverTimezone=Asia/Seoul";
 		String id = "root";
-		String pw = "920708";
+		String pw = "koreait2020";
 		
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection con = DriverManager.getConnection(url, id, pw);
-		System.out.println("접속 성공");
+		System.out.println("�젒�냽 �꽦怨�");
 		return con;
 	}
 	

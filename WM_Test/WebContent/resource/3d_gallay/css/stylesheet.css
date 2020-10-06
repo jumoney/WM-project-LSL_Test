@@ -13,12 +13,14 @@ body:hover {
 
 #container {
     box-sizing: border-box;
-    height: 100%;
-    left: 0;
+    height: 80%;
+   
+   
     margin: 0;
     position: absolute;
-    top: 0;
-    width: 100%;
+    left: 10%;
+    top:10%;
+    width: 80%;
 }
 
 #blocker {
@@ -45,7 +47,7 @@ body:hover {
     text-align: center;
     cursor: pointer;
 }
-/* ±×¸²Á¤º¸ css */
+/* ï¿½×¸ï¿½ï¿½ï¿½ï¿½ï¿½ css */
 #blocker2 {
     position: absolute;
     cursor: default;
@@ -131,7 +133,7 @@ body:hover {
 }
 
 
-/*¿ÞÂÊÆí css*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ css*/
 #writer_profile {
     height: 30%;
     

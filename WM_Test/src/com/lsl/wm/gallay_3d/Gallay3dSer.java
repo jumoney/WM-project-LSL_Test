@@ -96,6 +96,7 @@ public class Gallay3dSer extends HttpServlet {
 			jobj.put("user_email", param2.getUser_email());
 			jobj.put("workLikeCnt", domain.getWorkLikeCnt());
 			jobj.put("isLike", domain2.getIsLike());
+			jobj.put("profilePath", "/img/user/" + param.getI_user() + "/" + param2.getProfile_img());
 			out.print(jobj.toJSONString()); // json 형식으로 출력
 	     }
 	     

@@ -9,7 +9,7 @@ public class UserVO {
 	private String user_month; // 월
 	private String user_date; // 일
 	private String news; // 소식여부
-	
+	private String profile_img; // 프로필 이미지
 	
 	public int getI_user() {
 		return i_user;
@@ -59,5 +59,10 @@ public class UserVO {
 	public void setNews(String news) {
 		this.news = news;
 	}
-	
+	public String getProfile_img() {
+		return profile_img;
+	}
+	public void setProfile_img(String profile_img) {
+		this.profile_img = profile_img;
+	}
 }

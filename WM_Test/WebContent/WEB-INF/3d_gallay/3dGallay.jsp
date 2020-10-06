@@ -56,7 +56,7 @@
 			<div id="writer_profile">
 
 				<div id="writer_info_div">
-					<img>
+					<img id="writer_profile_img">
 					<p id="writer_name"></p>
 					<p id="writer_email"></p>
 					<p></p>
@@ -293,8 +293,11 @@
     var container = document.getElementById('container');
     container.appendChild(renderer.domElement);
 
+    var containerWidth = document.getElementById('container').offsetWidth;
+    var containerHeight = document.getElementById('container').offsetHeight;
+    
     // Set camera position and view details
-    camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
+    camera = new THREE.PerspectiveCamera(60, containerWidth / containerHeight, 1, 2000);
 
     // Add the camera to the controller, then add to the scene
     controls = new THREE.PointerLockControls(camera);
@@ -322,6 +325,7 @@
 
     // Listen for if the window changes sizes
     window.addEventListener('resize', onWindowResize, false);
+    renderer.setSize(containerWidth, containerHeight);
 
   }
 
@@ -710,10 +714,13 @@
   // Update the camera and renderer when the window changes size
   function onWindowResize() {
 
-    camera.aspect = window.innerWidth / window.innerHeight;
+	  var containerWidth = document.getElementById('container').offsetWidth;
+	    var containerHeight = document.getElementById('container').offsetHeight;
+	  
+    camera.aspect = containerWidth / containerHeight;
     camera.updateProjectionMatrix();
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(containerWidth, containerHeight);
 
   }
 
@@ -933,6 +940,8 @@
 		 	       document.getElementById('writer_name').innerHTML = data.nickName;
 		 	      document.getElementById('writer_email').innerHTML = '이메일: ' + data.user_email;
 		 	      document.getElementById('painting_like').innerHTML = data.workLikeCnt;
+		 	     document.getElementById('writer_profile_img').setAttribute('src', data.profilePath);
+		 	    
 		 	      if(data.isLike == '0')
 		 	      {
 		 	    	 document.getElementById('like_icon_div').setAttribute('src', '/resource/3d_gallay/images/icons/empty_like_icon.png');
