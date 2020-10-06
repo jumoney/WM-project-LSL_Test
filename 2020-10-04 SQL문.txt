@@ -22,7 +22,7 @@ start_dt DATETIME NOT NULL,
 end_dt DATETIME NOT NULL,
 exhibit_start_dt DATETIME NOT NULL,
 exhibit_end_dt DATETIME NOT NULL,
-show_tt_showitle VARCHAR(30) NOT NULL,
+show_title VARCHAR(30) NOT NULL,
 show_ctnt VARCHAR(1000) NOT NULL
 );
 
