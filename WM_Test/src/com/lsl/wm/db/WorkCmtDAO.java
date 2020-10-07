@@ -29,9 +29,9 @@ public class WorkCmtDAO {
 		});
 	}
 	
-	//´ñ±Û ¸®½ºÆ®¸¦ °¡Á®¿À´Â ¸Þ¼Òµå
+	//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¼Òµï¿½
 		public static List<WorkCmtDomain> selWorkCmtList(WorkCmtVO param) {
-			String sql = " SELECT B.nickname, A.cmt, A.r_dt, A.i_user, A.i_work_cmt"
+			String sql = " SELECT A.i_work, B.nickname, A.cmt, A.r_dt, A.i_user, A.i_work_cmt"
 					   + " FROM t_work_cmt A "
 					   + " JOIN t_user B "
 					   + " ON A.i_user = B.i_user "
@@ -51,6 +51,7 @@ public class WorkCmtDAO {
 				public int executeQuery(ResultSet rs) throws SQLException {
 					while(rs.next()) {
 						WorkCmtDomain vo = new WorkCmtDomain();
+						vo.setI_work(rs.getInt("i_work"));
 						vo.setNickname(rs.getString("nickname"));
 						vo.setCmt(rs.getString("cmt"));
 						vo.setI_user(rs.getInt("i_user"));
@@ -62,5 +63,21 @@ public class WorkCmtDAO {
 			});
 			
 			return list;
+		}
+		//Update
+		public static int updWorkCmt(WorkCmtVO param) {
+			String sql = " UPDATE t_work_cmt " 
+					+ " SET cmt = ? " 
+					+ " WHERE " 
+					+ " i_work_cmt = ? ";
+			
+			return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
+				
+				@Override
+				public void update(PreparedStatement ps) throws SQLException {
+					ps.setString(1, param.getCmt());
+					ps.setInt(2, param.getI_work_cmt());
+				}
+			});
 		}
 }

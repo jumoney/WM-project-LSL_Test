@@ -18,9 +18,8 @@ body:hover {
    
     margin: 0;
     position: absolute;
-    left: 10%;
     top:10%;
-    width: 80%;
+    width: 100%;
 }
 
 #blocker {
@@ -183,7 +182,7 @@ body:hover {
 
 #user_commnets #nickname p{
     font-size: 75%;
-   margin-top: 50%;
+   margin-top: 17%;
 }
 #user_commnets > div {
     float: left;
@@ -192,31 +191,39 @@ body:hover {
 }
 #user_commnets #nickname {
    margin-left: 5%;
-  line-height: 10%;
+  line-height: 100%;
+  width:15%;
   color: black;
 }
 #user_commnets div:nth-child(2) {
-    text-align: center;
     margin-left: 10%;
     font-size: 90%;
     font-weight: bold;
     line-height: 100%;
+    width: 30%;
     color: black;
+    overflow: auto;
 }
 #user_commnets div:nth-child(3) {
     text-align: center;
-    float: right;
+    width:25%;
     margin-right: 5%;
+     float:right;
 }
 #user_commnets div:nth-child(3) img {
-    width: 60%;
-    height: 50%;
-    margin-bottom: 0;
+	margin-top: 5%;
+	width: 22%;
+	heigth: 22%;
+	max-height: 30px;
+	max-width: 30px;
+	margin-left: 10%;
+   	float:left;
 }
+
 #user_commnets div:nth-child(3) p {
     width: 50%;
-    margin-top: 3%;
-    font-size: 50%;
+    heigth: 10%;
+    font-size: 70%;
     color: black;
 }
 #bottom_div {

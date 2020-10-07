@@ -37,11 +37,11 @@ public class Gallay3dSer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸¸¦ ¹Ş¾Æ¿Â´Ù.
+		//ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ş¾Æ¿Â´ï¿½.
 		UserVO loginUser = MyUtils.getLoginUser(request);
-		//Àü½ÃÈ¸ Á¤º¸¸¦ ¹Ş¾Æ¿Â´Ù.
+		//ï¿½ï¿½ï¿½ï¿½È¸ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ş¾Æ¿Â´ï¿½.
 		ShowVO param = ShowDAO.selLatestExhibition();
-		//Àü½ÃÈ¸ ÀÛÇ° ¸ñ·ÏÀ» °¡Á®¿Â´Ù.
+		//ï¿½ï¿½ï¿½ï¿½È¸ ï¿½ï¿½Ç° ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½.
 		ShowListVO vo = new ShowListVO();
 		
 		vo.setI_show(param.getI_show());
@@ -50,10 +50,12 @@ public class Gallay3dSer extends HttpServlet {
 		
 		String savePath2 = "/resource/user_writer/images/exhibition/";
 		
-		//Àü½ÃÈ¸ ÀÛÇ° ¸ñ·ÏÀ» º¸³»ÁØ´Ù.
+		//ï¿½ï¿½ï¿½ï¿½È¸ ï¿½ï¿½Ç° ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
 		request.setAttribute("workList", list);
-		//jsp¿¡¼­ Ãâ·ÂÇØÁÙ ÀÌ¹ÌÁöÀÇ °æ·Î¸¦ º¸³»ÁØ´Ù.
+		//jspï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½.
 		request.setAttribute("workImagePath", savePath2);
+		//ë¡œê·¸ì¸ ìœ ì € ì •ë³´ ë³´ë‚´ê¸°
+		request.setAttribute("loginUser", loginUser);
 		
 		String jsp = "/WEB-INF/3d_gallay/3dGallay.jsp"; 
 		request.getRequestDispatcher(jsp).forward(request, response);
@@ -61,23 +63,23 @@ public class Gallay3dSer extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//·Î±×ÀÎÇÑ »ç¿ëÀÚ Á¤º¸¸¦ ¹Ş¾Æ¿Â´Ù.
+		//ï¿½Î±ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ş¾Æ¿Â´ï¿½.
 		UserVO loginUser = MyUtils.getLoginUser(request);  
-		// json ÇüÅÂ·Î ¸®ÅÏÇÏ±â À§ÇÑ json°´Ã¼ »ı¼º
+		// json ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ jsonï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½
 		 response.setContentType("application/x-json; charset=UTF-8");
 	     PrintWriter out = response.getWriter();
-	     //ÀÛ°¡Á¤º¸¸¦ ºÒ·¯¿À´Â jsonÅë½ÌÀÌ¶ó¸é
+	     //ï¿½Û°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ jsonï¿½ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½
 	     if(request.getParameter("method").equals("selI_user")) {
 	    	 int i_work = Integer.parseInt(request.getParameter("i_work"));
-		     //i_work°ªÀ¸·Î ÀÛ°¡ Á¤º¸¸¦ °¡Á®¿Â´Ù.
+		     //i_workï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Û°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½.
 		     WorkVO param = new WorkVO();
 		    param.setI_work(i_work); 
 		    param = WorkDAO.selWork(param);
-		    //ÁÁ¾Æ¿ä ¼ö¸¦ °¡Á®¿Â´Ù.
+		    //ï¿½ï¿½ï¿½Æ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½.
 		    WorkLikeDomain domain = new WorkLikeDomain();
 		    domain.setI_work(i_work);
 		    domain = WorkLikeDAO.selWorkLikeCnt(domain);
-		    //³»°¡ ÁÁ¾Æ¿äÇÑ ±×¸²ÀÎÁö ¿©ºÎ
+		    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ¿ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		    WorkLikeDomain domain2 = new WorkLikeDomain();
 		    domain2.setI_user(loginUser.getI_user());
 		    domain2.setI_work(i_work);
@@ -86,21 +88,21 @@ public class Gallay3dSer extends HttpServlet {
 		    UserVO param2 = new UserVO();
 		    param2 = UserDAO.selUser(param.getI_user());
 		    
-			System.out.println("¾ÆÀÌ¿öÅ©°ª:" + i_work);
-			System.out.println("´Ğ³×ÀÓ: " + param2.getNickname());
-			System.out.println("ÀÌ¸ŞÀÏ: " + param2.getUser_email());
+			System.out.println("ï¿½ï¿½ï¿½Ì¿ï¿½Å©ï¿½ï¿½:" + i_work);
+			System.out.println("ï¿½Ğ³ï¿½ï¿½ï¿½: " + param2.getNickname());
+			System.out.println("ï¿½Ì¸ï¿½ï¿½ï¿½: " + param2.getUser_email());
 			
 			JSONObject jobj = new JSONObject();
-			System.out.println("ÁÁ¾Æ¿ä:" + domain2.getIsLike());
+			System.out.println("ï¿½ï¿½ï¿½Æ¿ï¿½:" + domain2.getIsLike());
 			jobj.put("nickName", param2.getNickname());
 			jobj.put("user_email", param2.getUser_email());
 			jobj.put("workLikeCnt", domain.getWorkLikeCnt());
 			jobj.put("isLike", domain2.getIsLike());
 			jobj.put("profilePath", "/img/user/" + param.getI_user() + "/" + param2.getProfile_img());
-			out.print(jobj.toJSONString()); // json Çü½ÄÀ¸·Î Ãâ·Â
+			out.print(jobj.toJSONString()); // json ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 	     }
 	     
-	     //´ñ±Û µî·ÏÀ» À§ÇÑ jsonÅë½ÅÀÌ¶ó¸é
+	     //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ jsonï¿½ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½
 	     if(request.getParameter("method").equals("doAddCmt")) {
 	    	 int i_work = Integer.parseInt(request.getParameter("i_work"));
 	    	 String cmt = request.getParameter("cmt");
@@ -113,16 +115,16 @@ public class Gallay3dSer extends HttpServlet {
 			
 			WorkCmtDAO.insWorkCmt(vo);
 			
-			//´ñ±Û ¸®½ºÆ®¸¦ ¹Ş¾Æ¿Â´Ù.
+			//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ş¾Æ¿Â´ï¿½.
 			List<WorkCmtDomain> list = new ArrayList();
 			vo.setI_work(i_work);
 			list = WorkCmtDAO.selWorkCmtList(vo);
 			
-			//¸®½ºÆ®¸¦ º¸³»±â À§ÇØ Gson¶óÀÌºê·¯¸®¸¦ È°¿ë
+			//ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Gsonï¿½ï¿½ï¿½Ìºê·¯ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½
 			String gson = new Gson().toJson(list);
 	    	 
             try {
-                //ajax·Î ¸®ÅÏÇØÁÖ´Â ºÎºĞ
+                //ajaxï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Îºï¿½
                 response.getWriter().write(gson);
             } catch (JsonIOException e) {
                 e.printStackTrace();
@@ -131,22 +133,54 @@ public class Gallay3dSer extends HttpServlet {
             }
 	     }
 	     
-	   //´ñ±ÛÀ» ºÒ·¯¿À±â À§ÇÑ jsonÅë½ÅÀÌ¶ó¸é
+	     //ëŒ“ê¸€ ìˆ˜ì • ë©”ì†Œë“œ
+	     if(request.getParameter("method").equals("doEditCmt")) {
+	    	 int i_work = Integer.parseInt(request.getParameter("i_work"));
+	    	 int i_work_cmt = Integer.parseInt(request.getParameter("i_work_cmt"));
+	    	 String cmt = request.getParameter("cmt");
+			System.out.println("ëŒ“ê¸€ ë²ˆí˜¸:" + i_work_cmt);
+			WorkCmtVO vo = new WorkCmtVO();
+			
+			vo.setI_work_cmt(i_work_cmt);
+			vo.setI_user(loginUser.getI_user());
+			vo.setCmt(cmt);
+			
+			WorkCmtDAO.updWorkCmt(vo);
+			
+			//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ş¾Æ¿Â´ï¿½.
+			List<WorkCmtDomain> list = new ArrayList();
+			vo.setI_work(i_work);
+			list = WorkCmtDAO.selWorkCmtList(vo);
+			
+			//ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Gsonï¿½ï¿½ï¿½Ìºê·¯ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½
+			String gson = new Gson().toJson(list);
+	    	 
+            try {
+                //ajaxï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Îºï¿½
+                response.getWriter().write(gson);
+            } catch (JsonIOException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+	     }
+	     
+	   //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ jsonï¿½ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½
 	     if(request.getParameter("method").equals("doReadCmt")) {
 	    	 int i_work = Integer.parseInt(request.getParameter("i_work"));
 	    	 	
 			WorkCmtVO vo = new WorkCmtVO();
 			
-			//´ñ±Û ¸®½ºÆ®¸¦ ¹Ş¾Æ¿Â´Ù.
+			//ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ş¾Æ¿Â´ï¿½.
 			List<WorkCmtDomain> list = new ArrayList();
 			vo.setI_work(i_work);
 			list = WorkCmtDAO.selWorkCmtList(vo);
 			
-			//¸®½ºÆ®¸¦ º¸³»±â À§ÇØ Gson¶óÀÌºê·¯¸®¸¦ È°¿ë
+			//ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Gsonï¿½ï¿½ï¿½Ìºê·¯ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½
 			String gson = new Gson().toJson(list);
 	    	 
             try {
-                //ajax·Î ¸®ÅÏÇØÁÖ´Â ºÎºĞ
+                //ajaxï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Îºï¿½
                 response.getWriter().write(gson);
             } catch (JsonIOException e) {
                 e.printStackTrace();
@@ -155,10 +189,10 @@ public class Gallay3dSer extends HttpServlet {
             }
 	     }
 	     
-	   //ÁÁ¾Æ¿ä Ã³¸®¸¦ À§ÇÑ jsonÅë½ÅÀÌ¶ó¸é
+	   //ï¿½ï¿½ï¿½Æ¿ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ jsonï¿½ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½
 	     if(request.getParameter("method").equals("doLike")) {
 	    	 int i_work = Integer.parseInt(request.getParameter("i_work"));
-	    	  //³»°¡ ÁÁ¾Æ¿äÇÑ ±×¸²ÀÎÁö ¿©ºÎ
+	    	  //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ¿ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			    WorkLikeDomain domain2 = new WorkLikeDomain();
 			    domain2.setI_user(loginUser.getI_user());
 			    domain2.setI_work(i_work);
@@ -168,27 +202,27 @@ public class Gallay3dSer extends HttpServlet {
 			    }else {
 			    	WorkLikeDAO.insWorkLike(domain2);
 			    }
-			    //´Ù½Ã ÁÁ¾Æ¿ä ¿©ºÎ¸¦ ¹Ş¾Æ¿Â´Ù.
+			    //ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½Æ¿ï¿½ ï¿½ï¿½ï¿½Î¸ï¿½ ï¿½Ş¾Æ¿Â´ï¿½.
 			    domain2 = WorkLikeDAO.selWorkLike(domain2);
-		    //ÁÁ¾Æ¿ä ¼ö¸¦ °¡Á®¿Â´Ù.
+		    //ï¿½ï¿½ï¿½Æ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½.
 		    WorkLikeDomain domain = new WorkLikeDomain();
 		    domain.setI_work(i_work);
 		    domain = WorkLikeDAO.selWorkLikeCnt(domain);
 		    
 		    System.out.println("------------doLike------------");
-			System.out.println("¾ÆÀÌ¿öÅ©°ª:" + i_work);
-			System.out.println("ÁÁ¾Æ¿ä¿©ºÎ:" + domain2.getIsLike());
-			System.out.println("ÁÁ¾Æ¿ä°³¼ö:" + domain2.getIsLike());
+			System.out.println("ï¿½ï¿½ï¿½Ì¿ï¿½Å©ï¿½ï¿½:" + i_work);
+			System.out.println("ï¿½ï¿½ï¿½Æ¿ä¿©ï¿½ï¿½:" + domain2.getIsLike());
+			System.out.println("ï¿½ï¿½ï¿½Æ¿ä°³ï¿½ï¿½:" + domain2.getIsLike());
 
 			JSONObject jobj = new JSONObject();
 			jobj.put("workLikeCnt", domain.getWorkLikeCnt());
 			jobj.put("isLike", domain2.getIsLike());
-			out.print(jobj.toJSONString()); // json Çü½ÄÀ¸·Î Ãâ·Â
+			out.print(jobj.toJSONString()); // json ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 	     }
 	     
 	    
 		
-	    // ÀÀ´ä½Ã json Å¸ÀÔÀÌ¶ó´Â °É ¸í½Ã ( ¾ÈÇØÁÖ¸é json Å¸ÀÔÀ¸·Î ÀÎ½ÄÇÏÁö ¸øÇÔ )
+	    // ï¿½ï¿½ï¿½ï¿½ï¿½ json Å¸ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ( ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ json Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ )
 
 		
 		

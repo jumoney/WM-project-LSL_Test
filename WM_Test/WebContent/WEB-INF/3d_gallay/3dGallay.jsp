@@ -22,12 +22,8 @@
 	<div id="blocker">
 
 		<div id="instructions">
-			<strong>전시회장에 오신걸 환영합니다!</br>
-			</br> 클릭으로 시작합니다.
-			</strong> </br>
-			</br> W,A,S,D 또는 방향키 = 움직이기 </br>
-			</br>
-			<strong>Mouse = 주위둘러보기</strong>
+			<strong>전시회장에 오신걸 환영합니다!</br> </br> 클릭으로 시작합니다.
+			</strong> </br> </br> W,A,S,D 또는 방향키 = 움직이기 </br> </br> <strong>Mouse = 주위둘러보기</strong>
 		</div>
 
 	</div>
@@ -62,13 +58,12 @@
 					<p></p>
 				</div>
 			</div>
-			<div id="user_commnets_div">
-				
-			</div>
+			<div id="user_commnets_div"></div>
 			<div id="bottom_div">
 				<div id="like_div">
-					<img id= "like_icon_div" src="/resource/3d_gallay/images/icons/empty_like_icon.png"
-						alt="" style="cursor: pointer">
+					<img id="like_icon_div"
+						src="/resource/3d_gallay/images/icons/empty_like_icon.png" alt=""
+						style="cursor: pointer">
 					<p>좋아요</p>
 				</div>
 				<div id="input_comment_div">
@@ -131,6 +126,7 @@
   var isPaintingShow = false;
 
   var isExit = false;
+ 
 
   //작품 생성자 함수 선언
   function workDomain(i_work, work_image, work_title, work_ctnt) {
@@ -469,13 +465,14 @@
       paintingGeoSideArr[2] = paintingGeoSide3;
 
       //그림객체에 텍스처 붙이기(그림 붙이기)
+      
       for(var i = 0; i<paintingDomainArr.length; i++) {
         texture = THREE.ImageUtils.loadTexture(paintingDomainArr[i].work_image);
         paintingMaterials.push(new THREE.MeshPhongMaterial({
           map: texture,
         }));
       }
-
+		
       //텍스처를 반복해서 촘촘하게 출력되게 한다(중요)
       wallMaterial.map.repeat.x = 1;  //20번반복
       wallMaterial.map.repeat.y = 1;  //20번반복
@@ -493,7 +490,9 @@
 
       // Place walls where 1`s are
     }
-
+	//Mesh모음
+	
+   	
     // 맵 생성 부문
     for (var i = 0; i < totalCubesWide; i++) {
       for (var j = 0; j < map[i].length; j++) {
@@ -505,10 +504,11 @@
           var pointLight;
           var color = 0xFFFFFF;
           var intensity = 2;
-
           var photoFrame;
           var photo;
           var wall = new THREE.Mesh(wallGeo, wallMaterial);
+          
+         
           wall.position.z = (i - totalCubesWide / 2) * UNITWIDTH + widthOffset;
           wall.position.y = heightOffset;
           wall.position.x = (j - totalCubesWide / 2) * UNITWIDTH + widthOffset;
@@ -1007,9 +1007,12 @@
 										<p id="comment_p">\${data[i].cmt}</p>
 									</div>
 									<div id="like_cmt">
-										<img src="/resource/3d_gallay/images/icons/cmt_like_icon.png"
-											alt="">
-										<p>100++</p>
+									<img src="/resource/3d_gallay/images/icons/edit_icon.png"
+										alt="" id="cmt_edit_icon">
+									
+									
+									<img src="/resource/3d_gallay/images/icons/delete_icon.png"
+										alt="" id="cmt_delete_icon">
 									</div>
 									
 								`;
@@ -1019,13 +1022,14 @@
 			 	      
 			 	    });
   }
-  
-  function doReadCmt(i) {
+  //댓글 수정 함수
+  function doEditCmt(i_work, i_work_cmt) {
 	  var cmt = document.getElementById('input_cmt').value;
 	  $.post("/gallay/gallay3d",
 			  {
-			  	method : "doReadCmt",
-			  	i_work : paintingDomainArr[i].i_work,
+			  	method : "doEditCmt",
+			  	'i_work' : i_work,
+			  	'i_work_cmt' : i_work_cmt,
 			  	cmt : cmt
 			  },
 				  function(data) {
@@ -1044,9 +1048,12 @@
 										<p id="comment_p">\${data[i].cmt}</p>
 									</div>
 									<div id="like_cmt">
-										<img src="/resource/3d_gallay/images/icons/cmt_like_icon.png"
-											alt="">
-										<p>100++</p>
+									<img src="/resource/3d_gallay/images/icons/edit_icon.png"
+										alt="" id="cmt_edit_icon">
+									
+									
+									<img src="/resource/3d_gallay/images/icons/delete_icon.png"
+										alt="" id="cmt_delete_icon">
 									</div>
 									
 								`;
@@ -1054,9 +1061,83 @@
 			 	    	user_commnets_div.append(user_commnets);
 			 	      }
 			 	      
+			 	     //그림의 배열 인덱스
+			 		  var idx;
+			 		  for(var i=0; i<paintingDomainArr.length; i++){
+			 			 if(data[0].i_work == paintingDomainArr[i].i_work){
+			 				 idx = i;
+			 				 break;
+			 			 }
+			 		  }
+			 		  document.getElementById('addCmtBtn').setAttribute('onclick', `doAddCmt(\${idx})`);
+			 	      
+			 	    });
+	 
+  }
+  
+  function doReadCmt(i) {
+	  var cmt = document.getElementById('input_cmt').value;
+	  $.post("/gallay/gallay3d",
+			  {
+			  	method : "doReadCmt",
+			  	i_work : paintingDomainArr[i].i_work,
+			  	cmt : cmt
+			  },
+				  function(data) {
+				  document.getElementById('input_cmt').value = "";
+				  
+				  var user_commnets_div = document.getElementById('user_commnets_div');
+		 	      user_commnets_div.innerHTML = "";
+			 	      for(var i =0; i<data.length; i++) {
+			 	    	  //cmt_i_user 값을 가져온다.
+			 	    	 var cmt_i_user = data[i].i_user;
+			 	    	 var user_commnets = document.createElement('div');
+			 	    		user_commnets.setAttribute('id', `user_commnets`);
+			 	    		user_commnets.innerHTML = `
+									<div id="nickname">
+										<p id="nickname_p">\${data[i].nickname}</p>
+									</div>
+									<div id="comment">
+										<p id="comment_p" class="cmt_idx_\${i}">\${data[i].cmt}</p>
+									</div>
+								`;
+							//자기가 달은 댓글이라면  아이콘을 붙여준다.
+							if(${loginUser.i_user} == cmt_i_user)
+							{
+								user_commnets.innerHTML += `
+										<div id="cmt_icon_div">
+										
+										<img src="/resource/3d_gallay/images/icons/edit_icon.png"
+											alt="" id="cmt_edit_icon" onclick="doCmtEdit(\${ paintingDomainArr[i].i_work},\${i})" style="cursor:pointer">
+									
+									
+										<img src="/resource/3d_gallay/images/icons/delete_icon.png"
+											alt="" id="cmt_delete_icon" onclick="doCmtDelete(\${i})" style="cursor:pointer">
+									
+										</div>
+										<input type="hidden" value="\${data[i].i_work_cmt}" id="i_work_cmt_\${i}">`
+							}
+			 	    	
+			 	    	user_commnets_div.append(user_commnets);
+			 	      }
+			 	      
 			 	    });
   }
-
+  
+  function doCmtEdit(i_work, i){
+	  //댓글 인덱스 값 받아옴
+	  var i_work_cmt = document.getElementById(`i_work_cmt_\${i}`).value;
+	  alert(i_work_cmt);
+	  alert('댓글 변경 함수 호출');
+	  var cmt = document.getElementsByClassName(`cmt_idx_\${i}`);
+	  document.getElementById('input_cmt').value = cmt[0].innerText;
+	  
+	  document.getElementById('addCmtBtn').setAttribute('onclick', `doEditCmt(\${i_work}, \${i_work_cmt})`);
+  }
+  
+  function doCmtDelete(i){
+	  alert('댓글 삭제 함수 호출');
+  }
 
   function doExit() {
     blocker2.style.display = "none";
