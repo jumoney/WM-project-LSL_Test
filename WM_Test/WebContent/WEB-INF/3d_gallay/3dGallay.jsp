@@ -102,9 +102,9 @@
   var moveLeft = false;
   var moveRight = false;
 
-  //플레이어 시작 위치 (y, z축)
+  //플레이어 시작 위치 (z, x축)
   var player_position_z;
-  var player_position_y;
+  var player_position_x;
 
   // Velocity vector for the player
   var playerVelocity = new THREE.Vector3();
@@ -192,8 +192,8 @@
 
   //맵(gallay)배열
 
-  //1번 전시관
-  var gallay1 = [
+  //25개 전시관
+  var gallay_25 = [
     [1, 1, 3, 1, 3, 1, 3, 1, 3, 1, 1, 1,],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1,],
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,],
@@ -207,7 +207,70 @@
     [1, 0, 0, 1, 1, 1, 5, 5, 5, 5, 5, 1,],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,]
   ];
+  //20개 전시관
+  var gallay_20 = [
+	    [1, 1, 3, 1, 3, 1, 3, 1, 3, 1,],
+	    [4, 0, 0, 0, 0, 0, 0, 0, 0, 6,],
+	    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1,],
+	    [1, 0, 3, 5, 1, 5, 1, 5, 0, 1,],
+	    [4, 0, 0, 1, 1, 1, 1, 1, 0, 1,],
+	    [1, 0, 0, 6, 1, 1, 3, 3, 0, 1,],
+	    [4, 0, 0, 1, 1, 4, 0, 0, 0, 1,],
+	    [1, 0, 0, 6, 1, 1, 0, 0, 0, 1,],
+	    [4, 0, 0, 6, 1, 4, 0, 0, 0, 1,],
+	    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,]
+	  ];
+  
+  //15개 전시관
+  var gallay_15 = [
+	    [1, 1, 3, 1, 3, 1, 3, 1, 1,],
+	    [4, 0, 0, 0, 0, 0, 0, 0, 6,],
+	    [1, 0, 0, 0, 0, 0, 0, 0, 1,],
+	    [1, 0, 3, 5, 1, 5, 1, 0, 1,],
+	    [4, 0, 0, 1, 1, 1, 1, 0, 6,],
+	    [1, 0, 0, 6, 1, 1, 1, 0, 1,],
+	    [4, 0, 0, 1, 1, 4, 0, 0, 1,],
+	    [1, 0, 0, 6, 1, 1, 0, 0, 1,],
+	    [1, 1, 1, 1, 1, 1, 1, 5, 1,]
+	  ];
+  
+	//10개 전시관
+  var gallay_10 = [
+	    [1, 1, 3, 1, 3, 1, 3, 1,],
+	    [4, 0, 0, 0, 0, 0, 0, 1,],
+	    [1, 0, 0, 0, 0, 0, 0, 6,],
+	    [1, 0, 0, 5, 1, 5, 1, 1,],
+	    [4, 0, 0, 1, 1, 1, 1, 1,],
+	    [1, 0, 0, 6, 1, 1, 1, 1,],
+	    [4, 0, 0, 1, 1, 1, 1, 1,],
+	    [1, 1, 1, 1, 1, 1, 1, 1,]
+	  ];
+	  
+	//5개 전시관
+  var gallay_5 = [
+	    [1, 1, 1, 1, 1, 1, 1,],
+	    [1, 0, 1, 1, 3, 1, 1,],
+	    [1, 0, 1, 0, 0, 0, 6,],
+	    [1, 0, 0, 0, 0, 0, 6,],
+	    [1, 0, 0, 0, 0, 0, 1,],
+	    [1, 0, 1, 0, 0, 0, 6,],
+	    [1, 1, 1, 5, 1, 1, 1,]
+	   
+	  ];
 
+
+  var cnt = 0;
+  
+  for(var i=0; i < gallay_10.length; i++) {
+	  for(var j=0; j<gallay_10[i].length; j++) {
+		  if(gallay_10[i][j] > 1)
+		{
+			  cnt++;
+		}
+	  }
+  }
+  
+  console.log('맵의 그림개수:' + cnt);
   //그림 개수
   var gallay1PaintingNum = 25;
 
@@ -298,12 +361,52 @@
     // Add the camera to the controller, then add to the scene
     controls = new THREE.PointerLockControls(camera);
     //카메라의 위치를 조정한다.
-    //카메라의 z축
-    controls.getObject().position.z = 400;
+   
     //카메라의 높이
     controls.getObject().position.y = 45;
+    
+    //작품수가 20개가 넘어 간다면
+    if(paintingDomainArr.length > 20){
+    	player_position_z = 400;
+    	player_position_x = -400;
+    	
+    	showGallay = gallay_25;
+    }
+    
+    if(paintingDomainArr.length <= 20 && paintingDomainArr.length > 15){
+    	player_position_z = 300;
+    	player_position_x = -300;
+    	
+    	showGallay = gallay_20;
+    }
+    
+    
+    if(paintingDomainArr.length <= 15 && paintingDomainArr.length > 10){
+    	player_position_z = 250;
+    	player_position_x = -250;
+    	
+    	showGallay = gallay_15;
+    }
+    
+    
+    if(paintingDomainArr.length <= 10 && paintingDomainArr.length > 5){
+    	player_position_z = 200;
+    	player_position_x = -200;
+    	
+    	showGallay = gallay_10;
+    }
+ 
+    if(paintingDomainArr.length <= 5){
+    	player_position_z = 200;
+    	player_position_x = -170;
+    	
+    	showGallay = gallay_5;
+    }
 
-    controls.getObject().position.x = -400;
+   	//카메라 x 축
+    controls.getObject().position.x = player_position_x;
+    //카메라의 z축
+    controls.getObject().position.z = player_position_z;
 
     scene.add(controls.getObject());
 
@@ -359,7 +462,7 @@
 
     //1번 전시관 이라면
     if (gallay_num == 1) {
-      var map = gallay1;
+      var map = showGallay;
 
       // 일반벽-----------------------------------------------------------------------------
       var wallGeo = new THREE.BoxBufferGeometry(UNITWIDTH, UNITHEIGHT, UNITWIDTH);
