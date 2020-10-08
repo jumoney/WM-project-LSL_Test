@@ -126,6 +126,7 @@ public class Gallay3dSer extends HttpServlet {
             try {
                 //ajax�� �������ִ� �κ�
                 response.getWriter().write(gson);
+                return;
             } catch (JsonIOException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -158,6 +159,7 @@ public class Gallay3dSer extends HttpServlet {
             try {
                 //ajax�� �������ִ� �κ�
                 response.getWriter().write(gson);
+                return;
             } catch (JsonIOException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -182,12 +184,46 @@ public class Gallay3dSer extends HttpServlet {
             try {
                 //ajax�� �������ִ� �κ�
                 response.getWriter().write(gson);
+                return;
             } catch (JsonIOException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 	     }
+	     
+	     //댓글 삭제 메소드
+	     if(request.getParameter("method").equals("doDelCmt")) {
+	    	 int i_work = Integer.parseInt(request.getParameter("i_work"));
+	    	 int i_work_cmt = Integer.parseInt(request.getParameter("i_work_cmt"));
+	    	
+			System.out.println("댓글 번호:" + i_work_cmt);
+			WorkCmtVO vo = new WorkCmtVO();
+			
+			vo.setI_work_cmt(i_work_cmt);
+			vo.setI_user(loginUser.getI_user());
+			
+			WorkCmtDAO.delWorkCmt(vo);
+			
+			//��� ����Ʈ�� �޾ƿ´�.
+			List<WorkCmtDomain> list = new ArrayList();
+			vo.setI_work(i_work);
+			list = WorkCmtDAO.selWorkCmtList(vo);
+			
+			//����Ʈ�� ������ ���� Gson���̺귯���� Ȱ��
+			String gson = new Gson().toJson(list);
+	    	 
+            try {
+                //ajax�� �������ִ� �κ�
+                response.getWriter().write(gson);
+                return;
+            } catch (JsonIOException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+	     }
+	     
 	     
 	   //���ƿ� ó���� ���� json����̶��
 	     if(request.getParameter("method").equals("doLike")) {

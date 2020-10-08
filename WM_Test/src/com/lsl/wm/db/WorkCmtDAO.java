@@ -80,4 +80,21 @@ public class WorkCmtDAO {
 				}
 			});
 		}
+		
+		
+		//Delete
+				public static int delWorkCmt(WorkCmtVO param) {
+					String sql = " DELETE " 
+							+ " FROM t_work_cmt " 
+							+ " WHERE " 
+							+ " i_work_cmt = ? ";
+					
+					return JdbcTemplate.executeUpdate(sql, new JdbcUpdateInterface() {
+						
+						@Override
+						public void update(PreparedStatement ps) throws SQLException {
+							ps.setInt(1, param.getI_work_cmt());
+						}
+					});
+				}
 }

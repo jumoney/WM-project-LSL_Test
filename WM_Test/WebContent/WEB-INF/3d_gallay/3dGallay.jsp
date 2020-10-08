@@ -985,6 +985,18 @@
   
   function doAddCmt(i) {
 	  var cmt = document.getElementById('input_cmt').value;
+	  var chk_cmt = document.getElementById('input_cmt').value;
+	  var i_work_origin = paintingDomainArr[i].i_work;
+	  
+	  if(chk_cmt.replace(/ /g,"").length == 0) {
+		alert('댓글을 입력하여주십시오.');  
+		return;
+	  }
+	  if(chk_cmt.length > 100) {
+		  alert('최대 100자 이내로 작성해주세요.');  
+			return;
+	  }
+	  
 	  $.post("/gallay/gallay3d",
 			  {
 			  	method : "doAddCmt",
@@ -992,11 +1004,13 @@
 			  	cmt : cmt
 			  },
 				  function(data) {
-				  document.getElementById('input_cmt').value = "";
+					document.getElementById('input_cmt').value = "";
 				  
 				  var user_commnets_div = document.getElementById('user_commnets_div');
 		 	      user_commnets_div.innerHTML = "";
 			 	      for(var i =0; i<data.length; i++) {
+			 	    	  //cmt_i_user 값을 가져온다.
+			 	    	 var cmt_i_user = data[i].i_user;
 			 	    	 var user_commnets = document.createElement('div');
 			 	    		user_commnets.setAttribute('id', `user_commnets`);
 			 	    		user_commnets.innerHTML = `
@@ -1004,18 +1018,25 @@
 										<p id="nickname_p">\${data[i].nickname}</p>
 									</div>
 									<div id="comment">
-										<p id="comment_p">\${data[i].cmt}</p>
+										<p id="comment_p" class="cmt_idx_\${i}">\${data[i].cmt}</p>
 									</div>
-									<div id="like_cmt">
-									<img src="/resource/3d_gallay/images/icons/edit_icon.png"
-										alt="" id="cmt_edit_icon">
-									
-									
-									<img src="/resource/3d_gallay/images/icons/delete_icon.png"
-										alt="" id="cmt_delete_icon">
-									</div>
-									
 								`;
+							//자기가 달은 댓글이라면  아이콘을 붙여준다.
+							if(${loginUser.i_user} == cmt_i_user)
+							{
+								user_commnets.innerHTML += `
+										<div id="cmt_icon_div">
+										
+										<img src="/resource/3d_gallay/images/icons/edit_icon.png"
+											alt="" id="cmt_edit_icon" onclick="doCmtEdit(\${i_work_origin}, \${i})" style="cursor:pointer">
+									
+									
+										<img src="/resource/3d_gallay/images/icons/delete_icon.png"
+											alt="" id="cmt_delete_icon" onclick="doCmtDelete(\${i_work_origin}, \${i})" style="cursor:pointer">
+									
+										</div>
+										<input type="hidden" value="\${data[i].i_work_cmt}" id="i_work_cmt_\${i}">`
+							}
 			 	    	
 			 	    	user_commnets_div.append(user_commnets);
 			 	      }
@@ -1025,6 +1046,18 @@
   //댓글 수정 함수
   function doEditCmt(i_work, i_work_cmt) {
 	  var cmt = document.getElementById('input_cmt').value;
+	  var chk_cmt = document.getElementById('input_cmt').value;
+	  var i_work_origin = i_work;
+	  
+	  if(chk_cmt.replace(/ /g,"").length == 0) {
+			alert('댓글을 입력하여주십시오.');  
+			return;
+		  }
+		  if(chk_cmt.length > 100) {
+			  alert('최대 100자 이내로 작성해주세요.');  
+				return;
+		  }
+	  
 	  $.post("/gallay/gallay3d",
 			  {
 			  	method : "doEditCmt",
@@ -1036,30 +1069,40 @@
 				  document.getElementById('input_cmt').value = "";
 				  
 				  var user_commnets_div = document.getElementById('user_commnets_div');
-		 	      user_commnets_div.innerHTML = "";
-			 	      for(var i =0; i<data.length; i++) {
-			 	    	 var user_commnets = document.createElement('div');
-			 	    		user_commnets.setAttribute('id', `user_commnets`);
-			 	    		user_commnets.innerHTML = `
-									<div id="nickname">
-										<p id="nickname_p">\${data[i].nickname}</p>
-									</div>
-									<div id="comment">
-										<p id="comment_p">\${data[i].cmt}</p>
-									</div>
-									<div id="like_cmt">
+				  user_commnets_div.innerHTML = "";
+		 	      for(var i =0; i<data.length; i++) {
+		 	    	  //cmt_i_user 값을 가져온다.
+		 	    	 var cmt_i_user = data[i].i_user;
+		 	    	 var user_commnets = document.createElement('div');
+		 	    		user_commnets.setAttribute('id', `user_commnets`);
+		 	    		user_commnets.innerHTML = `
+								<div id="nickname">
+									<p id="nickname_p">\${data[i].nickname}</p>
+								</div>
+								<div id="comment">
+									<p id="comment_p" class="cmt_idx_\${i}">\${data[i].cmt}</p>
+								</div>
+							`;
+						//자기가 달은 댓글이라면  아이콘을 붙여준다.
+						if(${loginUser.i_user} == cmt_i_user)
+						{
+							user_commnets.innerHTML += `
+									<div id="cmt_icon_div">
+									
 									<img src="/resource/3d_gallay/images/icons/edit_icon.png"
-										alt="" id="cmt_edit_icon">
-									
-									
+										alt="" id="cmt_edit_icon" onclick="doCmtEdit(\${i_work_origin}, \${i})" style="cursor:pointer">
+								
+								
 									<img src="/resource/3d_gallay/images/icons/delete_icon.png"
-										alt="" id="cmt_delete_icon">
+										alt="" id="cmt_delete_icon" onclick="doCmtDelete(\${i_work_origin}, \${i})" style="cursor:pointer">
+								
 									</div>
-									
-								`;
-			 	    	
-			 	    	user_commnets_div.append(user_commnets);
-			 	      }
+									<input type="hidden" value="\${data[i].i_work_cmt}" id="i_work_cmt_\${i}">`
+						}
+		 	    	
+		 	    	user_commnets_div.append(user_commnets);
+		 	      }
+			 	      
 			 	      
 			 	     //그림의 배열 인덱스
 			 		  var idx;
@@ -1077,6 +1120,7 @@
   
   function doReadCmt(i) {
 	  var cmt = document.getElementById('input_cmt').value;
+	  var i_work_origin = paintingDomainArr[i].i_work;
 	  $.post("/gallay/gallay3d",
 			  {
 			  	method : "doReadCmt",
@@ -1108,11 +1152,11 @@
 										<div id="cmt_icon_div">
 										
 										<img src="/resource/3d_gallay/images/icons/edit_icon.png"
-											alt="" id="cmt_edit_icon" onclick="doCmtEdit(\${ paintingDomainArr[i].i_work},\${i})" style="cursor:pointer">
+											alt="" id="cmt_edit_icon" onclick="doCmtEdit(\${i_work_origin},\${i})" style="cursor:pointer">
 									
 									
 										<img src="/resource/3d_gallay/images/icons/delete_icon.png"
-											alt="" id="cmt_delete_icon" onclick="doCmtDelete(\${i})" style="cursor:pointer">
+											alt="" id="cmt_delete_icon" onclick="doCmtDelete(\${i_work_origin}, \${i})" style="cursor:pointer">
 									
 										</div>
 										<input type="hidden" value="\${data[i].i_work_cmt}" id="i_work_cmt_\${i}">`
@@ -1127,16 +1171,65 @@
   function doCmtEdit(i_work, i){
 	  //댓글 인덱스 값 받아옴
 	  var i_work_cmt = document.getElementById(`i_work_cmt_\${i}`).value;
-	  alert(i_work_cmt);
-	  alert('댓글 변경 함수 호출');
 	  var cmt = document.getElementsByClassName(`cmt_idx_\${i}`);
 	  document.getElementById('input_cmt').value = cmt[0].innerText;
 	  
 	  document.getElementById('addCmtBtn').setAttribute('onclick', `doEditCmt(\${i_work}, \${i_work_cmt})`);
   }
   
-  function doCmtDelete(i){
-	  alert('댓글 삭제 함수 호출');
+  function doCmtDelete(i_work, i){
+	  //댓글 인덱스 값 받아옴
+	  var i_work_cmt = document.getElementById(`i_work_cmt_\${i}`).value;
+	  
+	  if(!confirm('댓글을 삭제하시겠습니까?')){
+		  return;
+	  }
+	  
+	  $.post("/gallay/gallay3d",
+			  {
+			  	method : "doDelCmt",
+			  	i_work : i_work,
+			  	i_work_cmt : i_work_cmt
+			  },
+			function(data) {
+				document.getElementById('input_cmt').value = "";
+				  
+				  var user_commnets_div = document.getElementById('user_commnets_div');
+		 	      user_commnets_div.innerHTML = "";
+			 	      for(var i =0; i<data.length; i++) {
+			 	    	  //cmt_i_user 값을 가져온다.
+			 	    	 var cmt_i_user = data[i].i_user;
+			 	    	 var user_commnets = document.createElement('div');
+			 	    		user_commnets.setAttribute('id', `user_commnets`);
+			 	    		user_commnets.innerHTML = `
+									<div id="nickname">
+										<p id="nickname_p">\${data[i].nickname}</p>
+									</div>
+									<div id="comment">
+										<p id="comment_p" class="cmt_idx_\${i}">\${data[i].cmt}</p>
+									</div>
+								`;
+							//자기가 달은 댓글이라면  아이콘을 붙여준다.
+							if(${loginUser.i_user} == cmt_i_user)
+							{
+								user_commnets.innerHTML += `
+										<div id="cmt_icon_div">
+										
+										<img src="/resource/3d_gallay/images/icons/edit_icon.png"
+											alt="" id="cmt_edit_icon" onclick="doCmtEdit(\${i_work},\${i})" style="cursor:pointer">
+									
+									
+										<img src="/resource/3d_gallay/images/icons/delete_icon.png"
+											alt="" id="cmt_delete_icon" onclick="doCmtDelete(\${i_work}, \${i})" style="cursor:pointer">
+									
+										</div>
+										<input type="hidden" value="\${data[i].i_work_cmt}" id="i_work_cmt_\${i}">`
+							}
+			 	    	
+			 	    	user_commnets_div.append(user_commnets);
+			 	      }
+			});
+	  
   }
 
   function doExit() {
